@@ -17,6 +17,7 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.5.0",
-    "nedb-promises": "^6.2.3"
+    "nedb-promises": "^6.2.3",
+    "resend": "^6.12.2"
   }
 }

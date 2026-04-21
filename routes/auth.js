@@ -1,51 +1,36 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../server/db');
+const { User } = require('../server/db');
 const auth = require('../server/middleware');
 
 const SECRET = process.env.JWT_SECRET || 'aistarterpack-secret-2025';
 
-// Register
 router.post('/register', async (req, res) => {
   try {
     const { firstName, lastName, email, password, birthYear, postalCode } = req.body;
-    if (!firstName || !lastName || !email || !password) {
+    if (!firstName || !lastName || !email || !password)
       return res.status(400).json({ error: 'Sva obavezna polja moraju biti popunjena.' });
-    }
-    if (password.length < 6) {
+    if (password.length < 6)
       return res.status(400).json({ error: 'Lozinka mora imati najmanje 6 karaktera.' });
-    }
-    const existing = await db.users.findOne({ email: email.toLowerCase() });
-    if (existing) {
+    const existing = await User.findOne({ email: email.toLowerCase() });
+    if (existing)
       return res.status(409).json({ error: 'Email adresa je već registrovana.' });
-    }
     const hash = await bcrypt.hash(password, 12);
-    const user = await db.users.insert({
-      firstName, lastName,
-      email: email.toLowerCase(),
-      password: hash,
-      birthYear: birthYear || null,
-      postalCode: postalCode || null,
-      createdAt: new Date().toISOString(),
-    });
+    const user = await User.create({ firstName, lastName, email: email.toLowerCase(), password: hash, birthYear, postalCode });
     const token = jwt.sign({ id: user._id, email: user.email }, SECRET, { expiresIn: '30d' });
     res.json({ token, user: { id: user._id, firstName, lastName, email: user.email } });
   } catch (e) {
-    if (e.errorType === 'uniqueViolated') {
-      return res.status(409).json({ error: 'Email adresa je već registrovana.' });
-    }
     console.error(e);
     res.status(500).json({ error: 'Greška na serveru.' });
   }
 });
 
-// Login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Unesite email i lozinku.' });
-    const user = await db.users.findOne({ email: email.toLowerCase() });
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) return res.status(401).json({ error: 'Pogrešan email ili lozinka.' });
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ error: 'Pogrešan email ili lozinka.' });
@@ -56,9 +41,8 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Get current user
 router.get('/me', auth, async (req, res) => {
-  const user = await db.users.findOne({ _id: req.user.id });
+  const user = await User.findById(req.user.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
   res.json({ id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email });
 });

@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { User } = require('../server/db');
 const auth = require('../server/middleware');
+const { sendWelcomeEmail } = require('../server/email');
 
 const SECRET = process.env.JWT_SECRET || 'aistarterpack-secret-2025';
 
@@ -19,6 +20,7 @@ router.post('/register', async (req, res) => {
     const hash = await bcrypt.hash(password, 12);
     const user = await User.create({ firstName, lastName, email: email.toLowerCase(), password: hash, birthYear, postalCode });
     const token = jwt.sign({ id: user._id, email: user.email }, SECRET, { expiresIn: '30d' });
+    sendWelcomeEmail(firstName, email);
     res.json({ token, user: { id: user._id, firstName, lastName, email: user.email } });
   } catch (e) {
     console.error(e);

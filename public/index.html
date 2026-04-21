@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Starter Pack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo" onclick="navigate('home')">
+    <img src="/img/logo.svg" alt="AI Starter Pack" class="logo-img">
+  </div>
+  <div class="nav-links" id="nav-links">
+    <a data-page="home" onclick="navigate('home')">Početna</a>
+    <a data-page="about" onclick="navigate('about')">O kursu</a>
+    <a data-page="modules" onclick="navigate('modules')">Moduli</a>
+    <a data-page="faq" onclick="navigate('faq')">FAQ</a>
+    <a data-page="dashboard" onclick="navigate('dashboard')" class="nav-auth-item" style="display:none">Moj kurs</a>
+  </div>
+  <div class="nav-right" id="nav-right">
+    <button class="btn btn-outline nav-auth-btn" onclick="navigate('login')">Prijava</button>
+    <button class="btn btn-red nav-auth-btn" onclick="navigate('register')">Registracija</button>
+    <div class="nav-user" id="nav-user" style="display:none">
+      <span id="nav-user-name"></span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Odjava</button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGES -->
+<div id="app">
+  <!-- injected by JS -->
+</div>
+
+<!-- FLOATING CTA -->
+<div class="float-cta" id="float-cta">
+  <div class="float-label" id="float-label">ZAPOČNI<br><span>Otkrij moć AI-a</span></div>
+  <button class="float-btn" onclick="handleCta()">
+    <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOuter(event)">
+  <div class="modal-box" id="modal-box"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="/js/data.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

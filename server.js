@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const authRoutes = require('./routes/auth');
 const courseRoutes = require('./routes/course');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 app.use(cors());
@@ -12,8 +13,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/course', courseRoutes);
+app.use('/api/admin', adminRoutes);
 
-// All other routes → SPA
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

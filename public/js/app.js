@@ -511,7 +511,7 @@ async function renderModules(app, params) {
             <div style="height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden">
               <div style="height:100%;width:${Math.round(userProgress.completedModules/7*100)}%;background:linear-gradient(90deg,var(--red),#ff6b6b);border-radius:3px;transition:width 1s ease"></div>
             </div>
-            ${userProgress.certificateEarned ? '<div style="margin-top:16px"><button class="btn btn-green" onclick="navigate('certificate')">🎓 Preuzmi sertifikat</button></div>' : ''}
+            ${userProgress.certificateEarned ? `<div style="margin-top:16px"><button class="btn btn-green" onclick="navigate('certificate')">🎓 Preuzmi sertifikat</button></div>` : ''}
           </div>` : `
           <div style="margin-top:32px;display:flex;gap:12px;flex-wrap:wrap">
             <button class="btn btn-red btn-lg" onclick="navigate('register')">Počni besplatno →</button>

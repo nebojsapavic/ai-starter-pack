@@ -28,6 +28,9 @@ function navigate(page, params = {}) {
   else if (page === 'dashboard') renderDashboard(app);
   else if (page === 'certificate') renderCertificate(app);
   else if (page === 'faq') renderFaq(app);
+  else if (page === 'privacy') renderPrivacy(app);
+  else if (page === 'terms') renderTerms(app);
+  else render404(app);
   else if (page === 'login') renderLogin(app);
   else if (page === 'register') renderRegister(app);
 
@@ -1249,6 +1252,155 @@ window.addEventListener('resize', () => {
   showHamburger();
   if (window.innerWidth > 768) closeMobileMenu();
 });
+
+
+// ============================================================
+// FOOTER
+// ============================================================
+function renderFooter() {
+  const existing = document.getElementById('site-footer');
+  if (existing) existing.remove();
+  const isAuth = ['login','register'].includes(currentPage);
+  if (isAuth) return;
+  const footer = document.createElement('footer');
+  footer.id = 'site-footer';
+  footer.className = 'site-footer';
+  footer.innerHTML = `
+    <div class="footer-top">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">${logoSVG(28)}</div>
+            <p class="footer-tagline">Veštačka inteligencija,<br>objašnjena jednostavno.</p>
+            <p class="footer-desc">Besplatan online kurs kroz 7 modula za sve koji žele da razumeju AI – bez predznanja.</p>
+            <div class="footer-social">
+              <a href="https://www.its.edu.rs" target="_blank" class="footer-social-link">ITS</a>
+              <a href="https://www.iths.edu.rs" target="_blank" class="footer-social-link">ITHS</a>
+              <a href="https://ai.org.rs" target="_blank" class="footer-social-link">AI Srbije</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Kurs</div>
+            <a onclick="navigate('modules')" class="footer-link">Svi moduli</a>
+            <a onclick="navigate('about')" class="footer-link">O kursu</a>
+            <a onclick="navigate('faq')" class="footer-link">FAQ</a>
+            <a onclick="navigate('register')" class="footer-link">Registracija</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Nalog</div>
+            <a onclick="navigate('login')" class="footer-link">Prijava</a>
+            <a onclick="navigate('dashboard')" class="footer-link">Dashboard</a>
+            <a onclick="navigate('certificate')" class="footer-link">Sertifikat</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Kontakt</div>
+            <a href="mailto:upis@its.edu.rs" class="footer-link">upis@its.edu.rs</a>
+            <a href="tel:+381114011216" class="footer-link">+381 11 40-11-216</a>
+            <span class="footer-link" style="cursor:default">Savski nasip 7, Beograd</span>
+            <a href="https://www.its.edu.rs" target="_blank" class="footer-link">www.its.edu.rs</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <div class="footer-bottom-inner">
+          <span>© ${new Date().getFullYear()} AI Starter Pack · ITS · ITHS · Savez za AI Srbije</span>
+          <div class="footer-bottom-links">
+            <a onclick="navigate('privacy')" class="footer-bottom-link">Politika privatnosti</a>
+            <a onclick="navigate('terms')" class="footer-bottom-link">Uslovi korišćenja</a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(footer);
+}
+
+// ============================================================
+// 404 PAGE
+// ============================================================
+function render404(app) {
+  app.innerHTML = `
+  <div class="page">
+    <section class="error-page">
+      <div class="error-bg"></div>
+      <div class="container error-content">
+        <div class="error-code">404</div>
+        <h1 class="error-title">Stranica nije pronađena</h1>
+        <p class="error-sub">Ova stranica ne postoji ili je premeštena. Vrati se na početnu.</p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:36px">
+          <button class="btn btn-red btn-lg" onclick="navigate('home')">← Početna</button>
+          <button class="btn btn-outline btn-lg" onclick="navigate('modules')">Pogledaj module</button>
+        </div>
+      </div>
+    </section>
+  </div>`;
+}
+
+// ============================================================
+// PRIVACY & TERMS
+// ============================================================
+function renderPrivacy(app) {
+  app.innerHTML = `
+  <div class="page">
+    <section class="page-hero" style="padding:80px 0 60px;background:linear-gradient(180deg,#fff,var(--bg2));border-bottom:1px solid var(--border)">
+      <div class="container">
+        <div class="section-label">Pravni dokumenti</div>
+        <h1 class="page-h1" style="font-size:clamp(32px,5vw,56px)">Politika privatnosti</h1>
+        <p class="page-sub">Poslednje ažuriranje: ${new Date().toLocaleDateString('sr-RS')}</p>
+      </div>
+    </section>
+    <div class="container">
+      <div class="legal-doc">
+        <h2>1. Koje podatke prikupljamo?</h2>
+        <p>Prikupljamo sledeće podatke pri registraciji: ime, prezime, email adresu, godinu rođenja i poštanski broj. Takođe pratimo napredak u kursu (završene lekcije i kvizove).</p>
+        <h2>2. Kako koristimo podatke?</h2>
+        <p>Podatke koristimo isključivo za: pružanje usluge kursa, slanje relevantnih obaveštenja, izdavanje digitalnog sertifikata i statističku analizu (anonimno).</p>
+        <h2>3. Čuvanje podataka</h2>
+        <p>Podaci se čuvaju na sigurnim serverima (MongoDB Atlas, Frankfurt). Lozinke su enkriptovane bcrypt algoritmom i nikada se ne čuvaju u čistom tekstu.</p>
+        <h2>4. Deljenje podataka</h2>
+        <p>Ne prodajemo niti delimo vaše podatke sa trećim licima, osim u slučajevima predviđenim zakonom.</p>
+        <h2>5. Vaša prava</h2>
+        <p>Imate pravo na pristup, ispravku i brisanje vaših podataka. Zahteve šaljite na: <a href="mailto:upis@its.edu.rs">upis@its.edu.rs</a></p>
+        <h2>6. Kontakt</h2>
+        <p>Za sva pitanja o privatnosti: <strong>upis@its.edu.rs</strong> · Savski nasip 7, Novi Beograd</p>
+      </div>
+    </div>
+    <div class="div-h"></div>
+  </div>`;
+}
+
+function renderTerms(app) {
+  app.innerHTML = `
+  <div class="page">
+    <section class="page-hero" style="padding:80px 0 60px;background:linear-gradient(180deg,#fff,var(--bg2));border-bottom:1px solid var(--border)">
+      <div class="container">
+        <div class="section-label">Pravni dokumenti</div>
+        <h1 class="page-h1" style="font-size:clamp(32px,5vw,56px)">Uslovi korišćenja</h1>
+        <p class="page-sub">Poslednje ažuriranje: ${new Date().toLocaleDateString('sr-RS')}</p>
+      </div>
+    </section>
+    <div class="container">
+      <div class="legal-doc">
+        <h2>1. Prihvatanje uslova</h2>
+        <p>Korišćenjem platforme AI Starter Pack prihvatate ove uslove korišćenja. Ukoliko se ne slažete, molimo vas da ne koristite platformu.</p>
+        <h2>2. Usluga</h2>
+        <p>AI Starter Pack je besplatna obrazovna platforma. Zadržavamo pravo izmene sadržaja kursa u cilju poboljšanja kvaliteta.</p>
+        <h2>3. Nalog korisnika</h2>
+        <p>Svaki korisnik može imati jedan nalog. Odgovorni ste za čuvanje pristupnih podataka. Zabranjeno je deljenje naloga.</p>
+        <h2>4. Sertifikat</h2>
+        <p>Digitalni sertifikat se izdaje po završetku svih 7 modula i postizanju min. 40% na svim kvizovima. Sertifikat je personalizovan i ne može se prenositi.</p>
+        <h2>5. Intelektualna svojina</h2>
+        <p>Sav sadržaj kursa (lekcije, kvizovi, materijali) je vlasništvo ITS-a i partnera. Zabranjeno je kopiranje i distribucija bez dozvole.</p>
+        <h2>6. Ograničenje odgovornosti</h2>
+        <p>Platforma se pruža "takva kakva je". Ne garantujemo neprekidnu dostupnost servisa.</p>
+        <h2>7. Kontakt</h2>
+        <p>Za pitanja: <strong>upis@its.edu.rs</strong> · +381 (0)11/40-11-216 · Savski nasip 7, Novi Beograd</p>
+      </div>
+    </div>
+    <div class="div-h"></div>
+  </div>`;
+}
 
 // INIT
 updateNav();

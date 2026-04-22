@@ -4,8 +4,6 @@ const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
 const hpp = require('hpp');
 
 const authRoutes = require('./routes/auth');
@@ -14,25 +12,25 @@ const adminRoutes = require('./routes/admin');
 
 const app = express();
 
-// ── SECURITY HEADERS ──
-app.use(helmet({
-  contentSecurityPolicy: false,
-  crossOriginEmbedderPolicy: false,
-}));
+// Trust Railway proxy
+app.set('trust proxy', 1);
 
-// ── RATE LIMITING ──
+// Security headers
+app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
+
+// Rate limiting
 const globalLimit = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 200,
-  message: { error: 'Previše zahteva. Pokušaj za 15 minuta.' },
+  max: 300,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.path.startsWith('/img') || req.path.startsWith('/css') || req.path.startsWith('/js'),
 });
 
 const authLimit = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
-  message: { error: 'Previše pokušaja prijave. Pokušaj za 15 minuta.' },
+  max: 15,
+  message: { error: 'Previše pokušaja. Pokušaj za 15 minuta.' },
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -41,12 +39,10 @@ app.use(globalLimit);
 app.use('/api/auth/login', authLimit);
 app.use('/api/auth/register', authLimit);
 
-// ── DATA SANITIZATION ──
-app.use(mongoSanitize());
-app.use(xss());
+// HPP
 app.use(hpp());
 
-// ── CORS ──
+// CORS
 app.use(cors({
   origin: [
     'https://www.ai-starterpack.edu.rs',
@@ -69,7 +65,6 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ── ERROR HANDLER ──
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Interna greška servera.' });

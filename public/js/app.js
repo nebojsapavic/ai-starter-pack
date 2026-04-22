@@ -32,7 +32,7 @@ function navigate(page, params = {}) {
   else if (page === 'register') renderRegister(app);
 
   setTimeout(() => {
-    document.querySelectorAll('.reveal').forEach(el => {
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
       const obs = new IntersectionObserver(entries => {
         entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
       }, { threshold: 0.06 });
@@ -109,13 +109,16 @@ function renderHome(app) {
   <div class="page">
 
     <section class="hero">
+      <div class="hero-bg-img" id="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-grid-lines"></div>
       <div class="hero-inner">
         <div class="hero-badge"><span class="hero-dot"></span>Besplatno &middot; Online &middot; Sertifikat</div>
         <h1 class="hero-h1">Veštačka inteligencija,<br><span>objašnjena jednostavno.</span></h1>
         <p class="hero-p">Besplatan online kurs kroz 7 praktičnih modula – nauči kako AI funkcioniše, gde ga koristiš svakodnevno i kako ti može pomoći da učiš, radiš i misliš pametnije.</p>
         <div class="hero-btns">
-          <button class="btn btn-red btn-lg" onclick="navigate('register')">Počni besplatno</button>
-          <button class="btn btn-ghost btn-lg" onclick="navigate('about')">Saznaj više &darr;</button>
+          <button class="btn btn-red btn-lg" onclick="navigate('register')">Počni besplatno →</button>
+          <button class="btn btn-ghost btn-lg" onclick="navigate('about')">Saznaj više</button>
         </div>
         <div class="hero-trust">
           <div class="trust-item"><span class="trust-check">✓</span> Bez kreditne kartice</div>
@@ -123,134 +126,163 @@ function renderHome(app) {
           <div class="trust-item"><span class="trust-check">✓</span> Digitalni sertifikat</div>
           <div class="trust-item"><span class="trust-check">✓</span> Dostupno na svim uređajima</div>
         </div>
+        <div class="hero-stats-row">
+          <div class="hero-stat"><div class="hs-val" data-count="7">7</div><div class="hs-label">Modula</div></div>
+          <div class="hero-stat-div"></div>
+          <div class="hero-stat"><div class="hs-val" data-count="21">21</div><div class="hs-label">Lekcija</div></div>
+          <div class="hero-stat-div"></div>
+          <div class="hero-stat"><div class="hs-val" data-count="35">35</div><div class="hs-label">Pitanja</div></div>
+          <div class="hero-stat-div"></div>
+          <div class="hero-stat"><div class="hs-val">100%</div><div class="hs-label">Besplatno</div></div>
+        </div>
       </div>
-      <div class="hero-stats-row">
-        <div class="hero-stat"><div class="hs-val">7</div><div class="hs-label">Modula</div></div>
-        <div class="hero-stat-div"></div>
-        <div class="hero-stat"><div class="hs-val">21</div><div class="hs-label">Lekcija</div></div>
-        <div class="hero-stat-div"></div>
-        <div class="hero-stat"><div class="hs-val">35</div><div class="hs-label">Pitanja u kvizovima</div></div>
-        <div class="hero-stat-div"></div>
-        <div class="hero-stat"><div class="hs-val">100%</div><div class="hs-label">Besplatno</div></div>
+      <div class="scroll-hint">
+        <span>Skroluj</span>
+        <div class="scroll-arrow"></div>
       </div>
     </section>
 
-    <section class="modules-preview reveal">
+    <section class="modules-preview">
       <div class="container">
-        <div class="section-label">Sadržaj kursa</div>
-        <h2 class="section-title">Šta te čeka u 7 modula?</h2>
-        <p class="section-sub">Kroz zanimljive primere, praktične vežbe i realne AI alate, učićeš sve što ti je potrebno da budeš na TI sa veštačkom inteligencijom.</p>
-        <div class="modules-list">
-          ${[
-            ['🟣','01','Šta je veštačka inteligencija?','Nauči osnovne pojmove, razliku između AI i mašinskog učenja, i otkrij koliko AI već koristiš svakog dana.'],
-            ['🔵','02','Kako AI rešava probleme?','Zaviri u logiku, algoritme i strategije koje AI koristi da donosi odluke i rešava zadatke – čak i u igrama.'],
-            ['🟢','03','Uvod u mašinsko učenje','Razumi kako AI "uči" iz podataka – i testiraj osnovne modele klasifikacije i predikcije.'],
-            ['🔴','04','Neuronske mreže – digitalni mozak','Otkrij kako funkcionišu neuronske mreže, kako prepoznaju slike i zašto AI uči "kao čovek".'],
-            ['🧩','05','AI u učenju, poslu i svakodnevici','Nauči kako da koristiš AI za brže učenje, organizaciju, pisanje i analize – i primeni to odmah.'],
-            ['⚖️','06','Odgovorno korišćenje AI','Razmišljaj kritički: kako da koristiš AI bezbedno, etički i svesno – i kako da prepoznaš rizike.'],
-            ['🌐','07','AI i društvo – uticaji i budućnost','Pogledaj širu sliku: kako AI menja obrazovanje, tržište rada i geopolitiku. Zamisli svet 2030.'],
-          ].map(([em, n, t, d], i) => `
-            <div class="module-row reveal" style="animation-delay:${i * 0.05}s">
-              <div class="mr-num">${n}</div>
-              <div class="mr-emoji">${em}</div>
-              <div class="mr-content">
-                <div class="mr-title">${t}</div>
-                <div class="mr-desc">${d}</div>
-              </div>
-              <button class="mr-btn" onclick="openModuleModal(${i + 1})">Detaljnije &rarr;</button>
+        <div class="modules-preview-inner">
+          <div class="modules-img-panel reveal-left">
+            <img src="/img/modules-img.png" alt="AI Neuronska mreža">
+            <div class="modules-img-caption">Neuronske mreže i AI koncepti koje ćeš savladati</div>
+          </div>
+          <div class="reveal-right">
+            <div class="section-label">Sadržaj kursa</div>
+            <h2 class="section-title">Šta te čeka u 7 modula?</h2>
+            <p class="section-sub">Kroz zanimljive primere, praktične vežbe i realne AI alate, učićeš sve što ti je potrebno da budeš na TI sa veštačkom inteligencijom.</p>
+            <div class="modules-list">
+              ${[
+                ['🟣','01','Šta je veštačka inteligencija?','Nauči osnovne pojmove, razliku između AI i ML'],
+                ['🔵','02','Kako AI rešava probleme?','Logika, algoritmi i strategije odlučivanja'],
+                ['🟢','03','Uvod u mašinsko učenje','Klasifikacija, predikcija i obrasci'],
+                ['🔴','04','Neuronske mreže','Digitalni mozak i prepoznavanje obrazaca'],
+                ['🧩','05','AI u učenju i poslu','Produktivnost, alati i organizacija'],
+                ['⚖️','06','Odgovorno korišćenje AI','Etika, privatnost i bezbednost'],
+                ['🌐','07','AI i društvo','Uticaji, izazovi i budućnost do 2030'],
+              ].map(([em,n,t,d]) => `
+                <div class="module-row" onclick="openModuleModal(${parseInt(n)})">
+                  <div class="mr-num">${n}</div>
+                  <div class="mr-emoji">${em}</div>
+                  <div class="mr-content"><div class="mr-title">${t}</div><div class="mr-desc">${d}</div></div>
+                  <button class="mr-btn">Više</button>
+                </div>`).join('')}
             </div>
-          `).join('')}
+            <div class="modules-cta">
+              <button class="btn btn-red btn-lg" onclick="navigate('register')">Počni kurs besplatno</button>
+              <button class="btn btn-outline" onclick="navigate('modules')">Svi moduli</button>
+            </div>
+          </div>
         </div>
-        <div class="modules-cta">
-          <button class="btn btn-red btn-lg" onclick="navigate('register')">Počni kurs besplatno</button>
-          <button class="btn btn-outline btn-lg" onclick="navigate('modules')">Svi moduli</button>
+      </div>
+    </section>
+
+    <section class="features-section">
+      <div class="container">
+        <div class="reveal" style="text-align:center">
+          <div class="section-label" style="justify-content:center">Zašto ovaj kurs</div>
+          <h2 class="section-title" style="max-width:600px;margin:0 auto 16px">Dizajniran za sve,<br>ne samo za tehničare.</h2>
+        </div>
+        <div class="features-grid">
+          ${[
+            ['🎓','Bez predznanja','Za učenike, nastavnike, roditelje i profesionalce. Nema kodiranja ni matematike.',0],
+            ['⚡','Odmah primenjivo','Praktični zadaci i AI alati koje možeš koristiti već danas u poslu i učenju.',0.1],
+            ['🏆','Sertifikat + ECTS','Digitalni sertifikat sa 2 ECTS boda i 100€ popust za ITS ili ITHS.',0.2],
+            ['📱','Uvek dostupno','Radi na svim uređajima. Učiš kada i koliko ti odgovara, bez roka.',0.1],
+            ['🆓','Potpuno besplatno','Bez skrivenih troškova. Registruj se i počni odmah.',0.2],
+            ['🤖','Aktuelni sadržaj','ChatGPT, neuronske mreže, etika AI – sve što se dešava danas.',0.3],
+          ].map(([icon,title,desc,delay]) => `
+            <div class="feature-card reveal" style="--delay:${delay}s">
+              <div class="feature-icon">${icon}</div>
+              <div class="feature-title">${title}</div>
+              <div class="feature-desc">${desc}</div>
+            </div>`).join('')}
         </div>
       </div>
     </section>
 
     <section class="why-section">
+      <div class="why-bg"></div>
+      <div class="why-bg-grad"></div>
       <div class="container">
         <div class="why-grid">
-          <div class="why-text reveal">
-            <div class="section-label">Zašto AI Starter Pack</div>
-            <h2 class="section-title">Dizajniran za sve,<br>ne samo za tehničare.</h2>
-            <p class="section-sub">Bilo da si učenik, nastavnik, roditelj, zaposleni ili radoznali pojedinac – ovaj kurs je napravljen za tebe. Nema kodiranja, nema matematike, samo jasna objašnjenja i praktična znanja.</p>
+          <div class="why-text reveal-left">
+            <div class="section-label">Zašto sada</div>
+            <h2 class="section-title">AI menja svet<br>koji živiš.</h2>
+            <p class="section-sub">Oni koji razumeju AI imaće prednost u obrazovanju, poslu i životu. Ovaj kurs ti daje taj temelj – besplatno.</p>
             <div class="why-points">
-              <div class="why-point"><div class="wp-icon">📘</div><div><strong>Uvod u AI kroz 7 modula</strong> – od osnovnih pojmova do svakodnevne primene</div></div>
-              <div class="why-point"><div class="wp-icon">🛠️</div><div><strong>Praktičan</strong> – učiš kroz zadatke, primere i alate koje možeš odmah da koristiš</div></div>
-              <div class="why-point"><div class="wp-icon">🎯</div><div><strong>Samostalno tempiran</strong> – učiš kad ti odgovara, sopstvenim ritmom</div></div>
-              <div class="why-point"><div class="wp-icon">🎓</div><div><strong>Sa digitalnim sertifikatom</strong> – 2 ECTS boda i 100€ popust za ITS/ITHS</div></div>
+              <div class="why-point"><div class="wp-icon">📘</div><div class="wp-text"><strong>Uvod kroz 7 modula</strong>Od osnovnih pojmova do svakodnevne primene</div></div>
+              <div class="why-point"><div class="wp-icon">🛠️</div><div class="wp-text"><strong>Praktičan odmah</strong>Zadaci i alati koje koristiš već sutra</div></div>
+              <div class="why-point"><div class="wp-icon">🎯</div><div class="wp-text"><strong>Tvoj tempo</strong>Učiš kad ti odgovara, bez roka ili pritiska</div></div>
+              <div class="why-point"><div class="wp-icon">🎓</div><div class="wp-text"><strong>Sertifikat + ECTS</strong>2 boda i 100€ popust za ITS/ITHS</div></div>
+            </div>
+            <div style="margin-top:36px">
+              <button class="btn btn-red btn-lg" onclick="navigate('register')">Registruj se besplatno</button>
             </div>
           </div>
-          <div class="why-card reveal">
-            <div class="why-card-inner">
-              <div class="wc-title">Kurs nije:</div>
-              <div class="wc-item wc-no">❌ Tehnički napredan kurs programiranja</div>
-              <div class="wc-item wc-no">❌ Zamena za formalno IT obrazovanje</div>
-              <div class="wc-item wc-no">❌ Samo za specijaliste i inženjere</div>
-              <div class="wc-divider"></div>
-              <div class="wc-title">Kurs jeste:</div>
-              <div class="wc-item wc-yes">✓ Besplatan i dostupan svima</div>
-              <div class="wc-item wc-yes">✓ Praktičan i odmah primenjiv</div>
-              <div class="wc-item wc-yes">✓ Napisan jasnim jezikom</div>
-              <div class="wc-item wc-yes">✓ Otvoren za sve uzraste i profesije</div>
-              <div class="wc-cta">
-                <button class="btn btn-red btn-wide" onclick="navigate('register')">Počni odmah – besplatno</button>
-              </div>
+          <div class="why-img-col reveal-right">
+            <div class="why-img-wrap">
+              <img src="/img/learning-img.png" alt="Učenje AI">
+            </div>
+            <div class="why-img-badge">
+              <div class="wib-val">100%</div>
+              <div class="wib-label">Besplatno</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="cert-section reveal">
+    <section class="cert-section">
+      <div class="cert-img-bg"></div>
       <div class="container">
-        <div class="cert-banner">
-          <div class="cb-left">
+        <div class="cert-inner">
+          <div class="cert-left reveal-left">
             <div class="section-label">Po završetku kursa</div>
-            <h2 class="cb-title">Digitalni sertifikat<br>+ 2 ECTS boda</h2>
-            <p class="cb-desc">Po završetku kursa dobijaš personalizovani digitalni sertifikat koji možeš podeliti na LinkedIn-u ili priložiti uz CV. Sertifikat nosi <strong>2 ECTS boda</strong> i <strong>100€ popust</strong> za upis na ITS ili ITHS.</p>
+            <h2 class="section-title">Digitalni sertifikat<br>+ 2 ECTS boda</h2>
+            <p class="section-sub">Personalizovani digitalni sertifikat koji možeš podeliti na LinkedIn-u ili priložiti uz CV. Sertifikat nosi 2 ECTS boda i 100€ popust za ITS ili ITHS.</p>
             <div class="cb-badges">
-              <div class="cb-badge">2 ECTS</div>
+              <div class="cb-badge">2 ECTS boda</div>
               <div class="cb-badge">100€ popust</div>
               <div class="cb-badge">LinkedIn ready</div>
             </div>
           </div>
-          <div class="cb-right">
-            <div class="cert-mock">
+          <div class="reveal-right">
+            <div class="cert-mockup">
+              <div class="cm-logo">${logoSVG(24)}</div>
               <div class="cm-label">Sertifikat o završetku</div>
               <div class="cm-title">AI Starter Pack</div>
               <div class="cm-sub">Dodeljuje se</div>
-              <div class="cm-name">Ime i Prezime</div>
-              <div class="cm-footer">
-                <span>2 ECTS</span>
-                <span>·</span>
-                <span>ITS · ITHS · AI Savez Srbije</span>
-              </div>
+              <div class="cm-name">Tvoje Ime</div>
+              <div class="cm-footer"><span>2 ECTS</span><span>·</span><span>ITS · ITHS · AI Srbije</span></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="partners-section reveal">
+    <section class="partners-section">
       <div class="container">
-        <div class="section-label">Realizatori kursa</div>
-        <h2 class="section-title">Ko stoji iza AI Starter Packa?</h2>
+        <div class="reveal" style="text-align:center">
+          <div class="section-label" style="justify-content:center">Realizatori kursa</div>
+          <h2 class="section-title">Ko stoji iza AI Starter Packa?</h2>
+        </div>
         <div class="partners-row">
-          <div class="partner-card">
+          <div class="partner-card reveal" style="--delay:0s">
             <div class="pc-logo">ITS</div>
             <div class="pc-name">Visoka škola strukovnih studija za informacione tehnologije</div>
             <div class="pc-url">www.its.edu.rs</div>
             <div class="pc-desc">Savremena visokoobrazovna ustanova, lider u IT obrazovanju u Srbiji.</div>
           </div>
-          <div class="partner-card">
+          <div class="partner-card reveal" style="--delay:0.1s">
             <div class="pc-logo">ITHS</div>
             <div class="pc-name">Srednja škola za informacione tehnologije</div>
             <div class="pc-url">www.iths.edu.rs</div>
-            <div class="pc-desc">Jedna od najmodernijih IT škola u Srbiji sa smerovima softverskog inženjeringa i sajber bezbednosti.</div>
+            <div class="pc-desc">Jedna od najmodernijih IT škola u Srbiji – softverski inženjering, sajber bezbednost.</div>
           </div>
-          <div class="partner-card">
+          <div class="partner-card reveal" style="--delay:0.2s">
             <div class="pc-logo">AI</div>
             <div class="pc-name">Savez za veštačku inteligenciju Srbije</div>
             <div class="pc-url">ai.org.rs</div>
@@ -261,29 +293,53 @@ function renderHome(app) {
     </section>
 
     <section class="slogan-section">
+      <div class="slogan-bg"></div>
+      <div class="slogan-glow"></div>
       <div class="container">
-        <div class="slogan-inner reveal">
-          <div class="slogan-quote">"Oni koji znaju AI biće šefovi<br>onima koji ne znaju."</div>
-          <p class="slogan-sub">Upoznaj moć veštačke inteligencije i pozicioniraj se za budućnost. Potpuno besplatno.</p>
-          <button class="btn btn-red btn-lg" onclick="navigate('register')">Registruj se odmah</button>
+        <div class="slogan-inner reveal-scale">
+          <div class="slogan-quote">"Oni koji znaju AI biće <em>šefovi</em><br>onima koji ne znaju."</div>
+          <p class="slogan-sub">Upoznaj moć veštačke inteligencije i pozicioniraj se za budućnost.<br>Potpuno besplatno, za svakoga.</p>
+          <button class="btn btn-red btn-lg" onclick="navigate('register')" style="font-size:16px;padding:16px 40px">Registruj se odmah →</button>
         </div>
       </div>
     </section>
 
   </div>`;
-}
 
-// ============================================================
-// ABOUT
-// ============================================================
+  // Animate hero background
+  setTimeout(() => {
+    const bg = document.getElementById('hero-bg');
+    if (bg) bg.classList.add('loaded');
+  }, 100);
+
+  // Animate counters
+  setTimeout(() => {
+    document.querySelectorAll('[data-count]').forEach(el => {
+      const target = parseInt(el.dataset.count);
+      let current = 0;
+      const timer = setInterval(() => {
+        current += Math.ceil(target / 20);
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = current;
+      }, 40);
+    });
+  }, 600);
+
+  // Nav scroll effect
+  const handleScroll = () => {
+    document.querySelector('nav')?.classList.toggle('scrolled', window.scrollY > 20);
+  };
+  window.addEventListener('scroll', handleScroll);
+}
 function renderAbout(app) {
   app.innerHTML = `
   <div class="page">
-    <section class="page-hero">
-      <div class="container">
-        <div class="section-label">O kursu</div>
-        <h1 class="page-h1">AI Starter Pack</h1>
-        <p class="page-sub">Veštačka inteligencija više nije daleka budućnost – ona je tu, u tvom telefonu, pretraživaču, aplikacijama i poslu. Kurs je osmišljen da ti pomogne da razumeš kako AI funkcioniše – bez potrebe za prethodnim znanjem iz programiranja ili matematike.</p>
+    <section class="page-hero page-hero-img" style="background-image:url('/img/about-img.png')">
+      <div class="page-hero-overlay"></div>
+      <div class="container" style="position:relative;z-index:2">
+        <div class="section-label" style="color:rgba(255,255,255,.7)">O kursu</div>
+        <h1 class="page-h1" style="color:#fff">AI Starter Pack</h1>
+        <p class="page-sub" style="color:rgba(255,255,255,.75)">Veštačka inteligencija više nije daleka budućnost – ona je tu, u tvom telefonu, pretraživaču, aplikacijama i poslu. Kurs je osmišljen da ti pomogne da razumeš kako AI funkcioniše – bez potrebe za prethodnim znanjem iz programiranja ili matematike.</p>
       </div>
     </section>
 

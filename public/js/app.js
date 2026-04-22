@@ -1131,6 +1131,37 @@ const printStyle = document.createElement('style');
 printStyle.textContent = `@media print { nav,.float-cta,.cert-actions,.modal-overlay{display:none!important} body{background:white!important;color:black!important} .cert-preview{box-shadow:none!important} }`;
 document.head.appendChild(printStyle);
 
+
+// ============================================================
+// MOBILE MENU
+// ============================================================
+function toggleMobileMenu() {
+  const menu = document.getElementById('nav-mobile-menu');
+  const btn = document.getElementById('nav-hamburger');
+  const isOpen = menu.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+function closeMobileMenu() {
+  const menu = document.getElementById('nav-mobile-menu');
+  const btn = document.getElementById('nav-hamburger');
+  menu.classList.remove('open');
+  btn.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function showHamburger() {
+  const hamburger = document.getElementById('nav-hamburger');
+  if (hamburger) hamburger.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+}
+
+window.addEventListener('resize', () => {
+  showHamburger();
+  if (window.innerWidth > 768) closeMobileMenu();
+});
+
 // INIT
 updateNav();
+showHamburger();
 navigate('home');

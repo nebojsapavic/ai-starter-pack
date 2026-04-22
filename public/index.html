@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Starter Pack</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap" rel="stylesheet">
+
+
 <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/upgrade.css">
 </head>
 <body>
 
@@ -29,8 +30,22 @@
       <span id="nav-user-name"></span>
       <button class="btn btn-outline btn-sm" onclick="logout()">Odjava</button>
     </div>
+    <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Meni">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+<div class="nav-mobile-menu" id="nav-mobile-menu">
+  <a onclick="navigate('home');closeMobileMenu()">Početna</a>
+  <a onclick="navigate('about');closeMobileMenu()">O kursu</a>
+  <a onclick="navigate('modules');closeMobileMenu()">Moduli</a>
+  <a onclick="navigate('faq');closeMobileMenu()">FAQ</a>
+  <a onclick="navigate('dashboard');closeMobileMenu()" id="mobile-dashboard-link" style="display:none">Moj kurs</a>
+  <div style="padding:16px 24px 24px;display:flex;flex-direction:column;gap:10px">
+    <button class="btn btn-outline btn-wide" id="mobile-login-btn" onclick="navigate('login');closeMobileMenu()">Prijava</button>
+    <button class="btn btn-red btn-wide" id="mobile-register-btn" onclick="navigate('register');closeMobileMenu()">Registracija</button>
+  </div>
+</div>
 
 <!-- PAGES -->
 <div id="app">

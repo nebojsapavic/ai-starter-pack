@@ -59,6 +59,20 @@ router.post('/quiz/submit', auth, async (req, res) => {
     const score = correct / module.questions.length;
     const passed = score >= PASS_THRESHOLD;
     await QuizResult.create({ userId, moduleId, score, correct, total: module.questions.length, passed });
+    // Check if all modules completed - send certificate email
+    if (passed) {
+      let completedCount = 0;
+      for (let m = 1; m <= TOTAL_MODULES; m++) {
+        const best = await QuizResult.findOne({ userId, moduleId: m, passed: true });
+        const lessons = await Progress.find({ userId, moduleId: m });
+        if (best && lessons.length >= LESSONS_PER_MODULE) completedCount++;
+      }
+      if (completedCount === TOTAL_MODULES) {
+        const user = await User.findById(userId);
+        const { sendCertificateEmail } = require("../server/email");
+        sendCertificateEmail(user.firstName, user.lastName, user.email);
+      }
+    }
     res.json({ score, correct, total: module.questions.length, passed, results });
   } catch(e) { console.error(e); res.status(500).json({ error: 'Greška' }); }
 });

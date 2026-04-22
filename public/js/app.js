@@ -32,6 +32,8 @@ function navigate(page, params = {}) {
   else if (page === 'terms') renderTerms(app);
   else if (page === 'login') renderLogin(app);
   else if (page === 'profile') renderProfile(app);
+  else if (page === 'forgot-password') renderForgotPassword(app);
+  else if (page === 'reset-password') renderResetPassword(app, params);
   else if (page === 'register') renderRegister(app);
   else render404(app);
 
@@ -1586,7 +1588,131 @@ function renderTerms(app) {
   </div>`;
 }
 
+
+// ============================================================
+// FORGOT / RESET PASSWORD
+// ============================================================
+function renderForgotPassword(app) {
+  app.innerHTML = `
+  <div class="page auth-page">
+    <div class="auth-split-left">
+      <div class="auth-left-content">
+        <div class="auth-left-logo">${logoSVG(32)}</div>
+        <h2 class="auth-left-title">Zaboravio/la<br>lozinku? 🔐</h2>
+        <p class="auth-left-sub">Unesite email adresu i poslaćemo vam link za reset lozinke.</p>
+        <div class="auth-left-img"><img src="/img/hero-bg.png" alt="AI"></div>
+      </div>
+    </div>
+    <div class="auth-split-right">
+      <div class="auth-form-wrap">
+        <div class="auth-form-header">
+          <h2 class="auth-form-title">Reset lozinke</h2>
+          <p class="auth-form-sub"><a onclick="navigate('login')">← Nazad na prijavu</a></p>
+        </div>
+        <div class="f-error" id="forgot-err"></div>
+        <div class="f-success" id="forgot-ok" style="display:none;padding:16px;background:rgba(22,163,74,.06);border:1px solid rgba(22,163,74,.2);border-radius:10px;color:#16a34a;font-size:14px;margin-bottom:16px"></div>
+        <div class="auth-field-group">
+          <label class="auth-label">Email adresa</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">✉️</span>
+            <input type="email" class="auth-input" id="forgot-email" placeholder="tvoj@email.com">
+          </div>
+        </div>
+        <button class="auth-submit" onclick="doForgotPassword()">
+          <span>Pošalji reset link</span>
+          <span class="auth-submit-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function doForgotPassword() {
+  const email = document.getElementById('forgot-email')?.value.trim();
+  const err = document.getElementById('forgot-err');
+  const ok = document.getElementById('forgot-ok');
+  if (!email) { showErr(err, 'Unesite email adresu.'); return; }
+  try {
+    await fetch('/api/auth/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    err.classList.remove('show');
+    ok.textContent = '✓ Ako nalog postoji, poslaćemo ti email sa linkom za reset. Proveri inbox (i spam folder).';
+    ok.style.display = 'block';
+    document.getElementById('forgot-email').value = '';
+  } catch(e) { showErr(err, 'Greška na serveru.'); }
+}
+
+function renderResetPassword(app, params = {}) {
+  const token = params.token || new URLSearchParams(window.location.hash.split('?')[1] || '').get('token') || '';
+  app.innerHTML = `
+  <div class="page auth-page">
+    <div class="auth-split-left">
+      <div class="auth-left-content">
+        <div class="auth-left-logo">${logoSVG(32)}</div>
+        <h2 class="auth-left-title">Nova lozinka 🔑</h2>
+        <p class="auth-left-sub">Unesite novu lozinku za vaš nalog.</p>
+        <div class="auth-left-img"><img src="/img/hero-bg.png" alt="AI"></div>
+      </div>
+    </div>
+    <div class="auth-split-right">
+      <div class="auth-form-wrap">
+        <div class="auth-form-header">
+          <h2 class="auth-form-title">Postavi novu lozinku</h2>
+        </div>
+        <div class="f-error" id="reset-err"></div>
+        <div class="auth-field-group">
+          <label class="auth-label">Nova lozinka</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">🔒</span>
+            <input type="password" class="auth-input" id="reset-pass" placeholder="min. 6 karaktera">
+          </div>
+        </div>
+        <div class="auth-field-group">
+          <label class="auth-label">Potvrdi novu lozinku</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">🔒</span>
+            <input type="password" class="auth-input" id="reset-pass2" placeholder="••••••••">
+          </div>
+        </div>
+        <button class="auth-submit" onclick="doResetPassword('${token}')">
+          <span>Sačuvaj novu lozinku</span>
+          <span class="auth-submit-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function doResetPassword(token) {
+  const pass = document.getElementById('reset-pass')?.value;
+  const pass2 = document.getElementById('reset-pass2')?.value;
+  const err = document.getElementById('reset-err');
+  if (!pass || !pass2) { showErr(err, 'Unesite novu lozinku.'); return; }
+  if (pass !== pass2) { showErr(err, 'Lozinke se ne podudaraju.'); return; }
+  if (pass.length < 6) { showErr(err, 'Lozinka mora imati najmanje 6 karaktera.'); return; }
+  try {
+    const res = await fetch('/api/auth/reset-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, newPassword: pass })
+    });
+    const data = await res.json();
+    if (!res.ok) { showErr(err, data.error); return; }
+    showToast('Lozinka uspešno promenjena! 🎉', 'success');
+    navigate('login');
+  } catch(e) { showErr(err, 'Greška na serveru.'); }
+}
+
 // INIT
 updateNav();
 showHamburger();
-navigate('home');
+// Check for reset password token in URL
+const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
+if (hashParams.get('token')) {
+  navigate('reset-password', { token: hashParams.get('token') });
+} else {
+  navigate('home');
+}

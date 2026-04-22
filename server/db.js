@@ -35,8 +35,14 @@ const quizSchema = new mongoose.Schema({
   submittedAt: { type: Date, default: Date.now }
 });
 
-module.exports = {
-  User: mongoose.model('User', userSchema),
-  Progress: mongoose.model('Progress', progressSchema),
-  QuizResult: mongoose.model('QuizResult', quizSchema),
-};
+
+// Password Reset
+const passwordResetSchema = new mongoose.Schema({
+  userId: { type: String, required: true },
+  token: { type: String, required: true, unique: true },
+  expiresAt: { type: Date, required: true },
+  used: { type: Boolean, default: false },
+}, { timestamps: true });
+const PasswordReset = mongoose.model('PasswordReset', passwordResetSchema);
+
+module.exports = { User, Progress, QuizResult, PasswordReset };

@@ -49,4 +49,57 @@ router.get('/me', auth, async (req, res) => {
   res.json({ id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email });
 });
 
+// Update profile
+router.put('/profile', auth, async (req, res) => {
+  try {
+    const { firstName, lastName } = req.body;
+    if (!firstName || !lastName)
+      return res.status(400).json({ error: 'Ime i prezime su obavezni.' });
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { firstName, lastName },
+      { new: true }
+    );
+    res.json({ id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email });
+  } catch (e) {
+    res.status(500).json({ error: 'Greška na serveru.' });
+  }
+});
+
+// Change password
+router.put('/password', auth, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword)
+      return res.status(400).json({ error: 'Unesite trenutnu i novu lozinku.' });
+    if (newPassword.length < 6)
+      return res.status(400).json({ error: 'Nova lozinka mora imati najmanje 6 karaktera.' });
+    const user = await User.findById(req.user.id);
+    const match = await bcrypt.compare(currentPassword, user.password);
+    if (!match) return res.status(401).json({ error: 'Trenutna lozinka nije ispravna.' });
+    const hash = await bcrypt.hash(newPassword, 12);
+    await User.findByIdAndUpdate(req.user.id, { password: hash });
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: 'Greška na serveru.' });
+  }
+});
+
+// Delete account
+router.delete('/account', auth, async (req, res) => {
+  try {
+    const { password } = req.body;
+    const user = await User.findById(req.user.id);
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(401).json({ error: 'Pogrešna lozinka.' });
+    const { Progress, QuizResult } = require('../server/db');
+    await Progress.deleteMany({ userId: req.user.id });
+    await QuizResult.deleteMany({ userId: req.user.id });
+    await User.findByIdAndDelete(req.user.id);
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: 'Greška na serveru.' });
+  }
+});
+
 module.exports = router;

@@ -31,6 +31,7 @@ function navigate(page, params = {}) {
   else if (page === 'privacy') renderPrivacy(app);
   else if (page === 'terms') renderTerms(app);
   else if (page === 'login') renderLogin(app);
+  else if (page === 'profile') renderProfile(app);
   else if (page === 'register') renderRegister(app);
   else render404(app);
 
@@ -1218,6 +1219,189 @@ function showErr(el, msg) {
   setTimeout(() => el.classList.remove('show'), 5000);
 }
 
+// ============================================================
+// PROFILE PAGE
+// ============================================================
+async function renderProfile(app) {
+  const user = API.getUser();
+  if (!user) { navigate('login'); return; }
+  await loadProgress();
+  const p = userProgress || { completedModules: 0, totalModules: 7, certificateEarned: false };
+  let doneLessons = 0;
+  if (userProgress) Object.values(userProgress.moduleProgress).forEach(mp => {
+    doneLessons += Object.values(mp.lessons).filter(l => l.completed).length;
+  });
+
+  app.innerHTML = `
+  <div class="page">
+    <section class="profile-hero">
+      <div class="container">
+        <div class="profile-header">
+          <div class="profile-avatar">${user.firstName[0]}${user.lastName[0]}</div>
+          <div class="profile-info">
+            <h1 class="profile-name">${user.firstName} ${user.lastName}</h1>
+            <p class="profile-email">${user.email}</p>
+            <div class="profile-badges">
+              <span class="profile-badge">${p.completedModules}/7 modula</span>
+              <span class="profile-badge">${doneLessons} lekcija</span>
+              ${p.certificateEarned ? '<span class="profile-badge profile-badge-green">🎓 Sertifikat</span>' : ''}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:64px 0 100px">
+      <div class="container">
+        <div class="profile-grid">
+
+          <!-- Edit Profile -->
+          <div class="profile-card">
+            <div class="profile-card-title">✏️ Izmena profila</div>
+            <div class="f-error" id="profile-err"></div>
+            <div class="f-success" id="profile-ok"></div>
+            <div class="f-group">
+              <label class="f-label">Ime</label>
+              <input type="text" class="f-input" id="p-first" value="${user.firstName}">
+            </div>
+            <div class="f-group">
+              <label class="f-label">Prezime</label>
+              <input type="text" class="f-input" id="p-last" value="${user.lastName}">
+            </div>
+            <div class="f-group">
+              <label class="f-label">Email (ne može se menjati)</label>
+              <input type="email" class="f-input" value="${user.email}" disabled style="opacity:.5;cursor:not-allowed">
+            </div>
+            <button class="btn btn-red btn-wide" onclick="saveProfile()">Sačuvaj izmene</button>
+          </div>
+
+          <!-- Change Password -->
+          <div class="profile-card">
+            <div class="profile-card-title">🔒 Promena lozinke</div>
+            <div class="f-error" id="pass-err"></div>
+            <div class="f-success" id="pass-ok"></div>
+            <div class="f-group">
+              <label class="f-label">Trenutna lozinka</label>
+              <input type="password" class="f-input" id="p-current" placeholder="••••••••">
+            </div>
+            <div class="f-group">
+              <label class="f-label">Nova lozinka</label>
+              <input type="password" class="f-input" id="p-new" placeholder="min. 6 karaktera">
+            </div>
+            <div class="f-group">
+              <label class="f-label">Potvrdi novu lozinku</label>
+              <input type="password" class="f-input" id="p-new2" placeholder="••••••••">
+            </div>
+            <button class="btn btn-outline btn-wide" onclick="changePassword()">Promeni lozinku</button>
+          </div>
+
+          <!-- Progress Overview -->
+          <div class="profile-card profile-card-wide">
+            <div class="profile-card-title">📊 Moj napredak</div>
+            <div class="profile-progress-grid">
+              ${Array.from({length:7},(_,i)=>{
+                const mp = userProgress?.moduleProgress?.[i+1] || {};
+                const done = Object.values(mp.lessons||{}).filter(l=>l.completed).length;
+                const pct = Math.round(done/3*100);
+                return `<div class="pp-item">
+                  <div class="pp-top">
+                    <span class="pp-num">Modul ${i+1}</span>
+                    <span class="pp-status ${mp.completed?'done':done>0?'progress':''}">${mp.completed?'✓':done>0?done+'/3':'–'}</span>
+                  </div>
+                  <div class="pp-bar"><div class="pp-fill" style="width:${pct}%"></div></div>
+                  <div class="pp-quiz">${mp.quizPassed?'Kviz ✓':mp.quizAttempts>0?'Kviz '+Math.round((mp.quizScore||0)*100)+'%':'Kviz čeka'}</div>
+                </div>`;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="profile-card profile-card-danger">
+            <div class="profile-card-title">⚠️ Opasna zona</div>
+            <p style="font-size:14px;color:var(--text3);margin-bottom:20px;line-height:1.65">Brisanjem naloga trajno uklanjate sve podatke, napredak i sertifikate. Ova akcija je nepovratna.</p>
+            <div class="f-error" id="del-err"></div>
+            <div class="f-group">
+              <label class="f-label">Unesite lozinku za potvrdu</label>
+              <input type="password" class="f-input" id="p-del-pass" placeholder="Vaša lozinka">
+            </div>
+            <button class="btn btn-wide" style="background:var(--red);color:#fff" onclick="deleteAccount()">Obriši nalog zauvek</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </div>`;
+}
+
+async function saveProfile() {
+  const firstName = document.getElementById('p-first')?.value.trim();
+  const lastName = document.getElementById('p-last')?.value.trim();
+  const err = document.getElementById('profile-err');
+  const ok = document.getElementById('profile-ok');
+  if (!firstName || !lastName) { showErr(err, 'Ime i prezime su obavezni.'); return; }
+  try {
+    const res = await fetch('/api/auth/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API.getToken() },
+      body: JSON.stringify({ firstName, lastName })
+    });
+    const data = await res.json();
+    if (!res.ok) { showErr(err, data.error); return; }
+    localStorage.setItem('user', JSON.stringify(data));
+    ok.textContent = '✓ Profil uspešno ažuriran!';
+    ok.style.display = 'block';
+    updateNav();
+    setTimeout(() => ok.style.display = 'none', 3000);
+  } catch(e) { showErr(err, 'Greška na serveru.'); }
+}
+
+async function changePassword() {
+  const current = document.getElementById('p-current')?.value;
+  const newPass = document.getElementById('p-new')?.value;
+  const newPass2 = document.getElementById('p-new2')?.value;
+  const err = document.getElementById('pass-err');
+  const ok = document.getElementById('pass-ok');
+  if (!current || !newPass || !newPass2) { showErr(err, 'Sva polja su obavezna.'); return; }
+  if (newPass !== newPass2) { showErr(err, 'Nove lozinke se ne podudaraju.'); return; }
+  if (newPass.length < 6) { showErr(err, 'Lozinka mora imati najmanje 6 karaktera.'); return; }
+  try {
+    const res = await fetch('/api/auth/password', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API.getToken() },
+      body: JSON.stringify({ currentPassword: current, newPassword: newPass })
+    });
+    const data = await res.json();
+    if (!res.ok) { showErr(err, data.error); return; }
+    ok.textContent = '✓ Lozinka uspešno promenjena!';
+    ok.style.display = 'block';
+    document.getElementById('p-current').value = '';
+    document.getElementById('p-new').value = '';
+    document.getElementById('p-new2').value = '';
+    setTimeout(() => ok.style.display = 'none', 3000);
+  } catch(e) { showErr(err, 'Greška na serveru.'); }
+}
+
+async function deleteAccount() {
+  const pass = document.getElementById('p-del-pass')?.value;
+  const err = document.getElementById('del-err');
+  if (!pass) { showErr(err, 'Unesite lozinku.'); return; }
+  if (!confirm('Da li ste sigurni? Ova akcija je NEPOVRATNA!')) return;
+  try {
+    const res = await fetch('/api/auth/account', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API.getToken() },
+      body: JSON.stringify({ password: pass })
+    });
+    const data = await res.json();
+    if (!res.ok) { showErr(err, data.error); return; }
+    API.logout();
+    updateNav();
+    showToast('Nalog je obrisan.', 'success');
+    navigate('home');
+  } catch(e) { showErr(err, 'Greška na serveru.'); }
+}
+
+// Print CSS
 // Print CSS
 const printStyle = document.createElement('style');
 printStyle.textContent = `@media print { nav,.float-cta,.cert-actions,.modal-overlay{display:none!important} body{background:white!important;color:black!important} .cert-preview{box-shadow:none!important} }`;

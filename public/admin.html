@@ -4,56 +4,122 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel – AI Starter Pack</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0a0a0a;color:#fff;font-family:'Exo 2',sans-serif;min-height:100vh}
-::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#E30613}
-.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh}
-.login-box{background:#111;border:1px solid rgba(227,6,19,.3);padding:48px;width:100%;max-width:400px}
-.login-box h1{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
-.login-box p{color:#666;font-size:13px;margin-bottom:32px}
-.f-label{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:8px;display:block}
-.f-input{width:100%;padding:12px 18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:40px;color:#fff;font-family:'Exo 2',sans-serif;font-size:14px;outline:none;margin-bottom:20px}
-.f-input:focus{border-color:rgba(227,6,19,.5)}
-.btn{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:12px 28px;cursor:pointer;border:none;background:#E30613;color:#fff;width:100%}
-.btn:hover{background:#b80010}
-.error{color:#ef4444;font-size:12px;margin-bottom:16px;display:none}
-.error.show{display:block}
+:root{--red:#E8192C;--bg:#0c0c0e;--bg2:#111114;--bg3:#18181c;--surface:#1e1e23;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);--white:#f5f5f7;--white2:rgba(245,245,247,.7);--white3:rgba(245,245,247,.4);--white4:rgba(245,245,247,.12);--green:#22c55e;--font:'Plus Jakarta Sans',sans-serif}
+body{background:var(--bg);color:var(--white);font-family:var(--font);min-height:100vh;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px}
 
-/* Dashboard */
+/* LOGIN */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg);position:relative;overflow:hidden}
+.login-wrap::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(232,25,44,.08),transparent 65%);pointer-events:none}
+.login-box{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:48px;width:100%;max-width:420px;position:relative;z-index:2}
+.login-logo{margin-bottom:32px;display:flex;justify-content:center}
+.login-logo img{height:36px;filter:brightness(0) invert(1)}
+.login-title{font-size:28px;font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:6px}
+.login-sub{font-size:14px;color:var(--white3);text-align:center;margin-bottom:32px}
+.f-label{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--white3);margin-bottom:8px;display:block}
+.f-input{width:100%;padding:13px 18px;background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;color:var(--white);font-family:var(--font);font-size:14px;outline:none;transition:border-color .2s;margin-bottom:20px}
+.f-input:focus{border-color:rgba(232,25,44,.5)}
+.f-input::placeholder{color:var(--white4)}
+.btn-login{width:100%;padding:14px;background:var(--red);border:none;border-radius:12px;color:#fff;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-login:hover{background:#c01020;transform:translateY(-1px);box-shadow:0 8px 24px rgba(232,25,44,.3)}
+.err{color:#ef4444;font-size:13px;margin-bottom:16px;padding:10px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;display:none}
+.err.show{display:block}
+
+/* DASHBOARD */
 .dashboard{display:none}
-.topbar{background:#111;border-bottom:1px solid rgba(255,255,255,.07);padding:16px 32px;display:flex;align-items:center;justify-content:space-between}
-.topbar h1{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;letter-spacing:3px;text-transform:uppercase}
-.topbar h1 span{color:#E30613}
-.logout-btn{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid rgba(255,255,255,.2);color:#888;padding:8px 20px;cursor:pointer}
-.logout-btn:hover{border-color:#E30613;color:#E30613}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.topbar-logo img{height:24px;filter:brightness(0) invert(1)}
+.topbar-title{font-size:16px;font-weight:700;letter-spacing:-.02em;color:var(--white)}
+.topbar-badge{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--red);background:rgba(232,25,44,.1);border:1px solid rgba(232,25,44,.2);padding:3px 10px;border-radius:980px}
+.topbar-right{display:flex;gap:10px;align-items:center}
+.btn{font-family:var(--font);font-size:13px;font-weight:600;padding:8px 18px;border-radius:10px;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--white2)}
+.btn-outline:hover{border-color:rgba(255,255,255,.25);color:var(--white)}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:#c01020}
+.btn-green{background:#16a34a;color:#fff}
+.btn-green:hover{background:#15803d}
+.btn-sm{padding:6px 14px;font-size:12px}
 
-.content{padding:32px}
-.stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:32px}
-.stat{background:#111;border:1px solid rgba(255,255,255,.07);padding:20px;text-align:center}
-.stat-val{font-family:'Rajdhani',sans-serif;font-size:36px;font-weight:900;color:#E30613;line-height:1}
-.stat-label{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-top:6px}
+/* LAYOUT */
+.main-content{padding:32px}
 
-.section-title{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#666;margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07)}
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;transition:border-color .2s}
+.stat-card:hover{border-color:var(--border2)}
+.stat-val{font-size:32px;font-weight:800;letter-spacing:-.04em;color:var(--red);line-height:1;margin-bottom:6px}
+.stat-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--white3)}
 
-.search-bar{width:100%;max-width:400px;padding:10px 18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:40px;color:#fff;font-family:'Exo 2',sans-serif;font-size:13px;outline:none;margin-bottom:20px}
-.search-bar:focus{border-color:rgba(227,6,19,.4)}
+/* TABS */
+.tabs{display:flex;gap:2px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:24px;width:fit-content}
+.tab{font-family:var(--font);font-size:13px;font-weight:600;padding:8px 20px;border-radius:8px;cursor:pointer;border:none;background:transparent;color:var(--white3);transition:all .2s}
+.tab.active{background:var(--surface);color:var(--white)}
 
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.search-input{padding:10px 18px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:var(--font);font-size:14px;outline:none;width:320px;transition:border-color .2s}
+.search-input:focus{border-color:rgba(232,25,44,.4)}
+.search-input::placeholder{color:var(--white3)}
+
+/* TABLE */
+.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden}
 table{width:100%;border-collapse:collapse}
-th{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;padding:10px 14px;text-align:left;border-bottom:1px solid rgba(255,255,255,.07)}
-td{padding:14px;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:#aaa;vertical-align:middle}
+th{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--white3);padding:14px 18px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:14px 18px;border-bottom:1px solid var(--border);font-size:13px;color:var(--white2);vertical-align:middle}
+tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,.02)}
-.badge{display:inline-block;padding:3px 10px;font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-.badge-green{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3)}
-.badge-red{background:rgba(227,6,19,.1);color:#E30613;border:1px solid rgba(227,6,19,.2)}
-.badge-grey{background:rgba(255,255,255,.05);color:#666;border:1px solid rgba(255,255,255,.1)}
-.progress-bar-wrap{width:120px;height:4px;background:rgba(255,255,255,.08);border-radius:2px}
-.progress-bar-fill{height:100%;background:#E30613;border-radius:2px;transition:width .3s}
-.delete-btn{background:none;border:1px solid rgba(239,68,68,.3);color:#ef4444;padding:5px 12px;font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s}
-.delete-btn:hover{background:rgba(239,68,68,.1)}
-.loading{text-align:center;padding:40px;color:#555;font-family:'Rajdhani',sans-serif;letter-spacing:2px;text-transform:uppercase}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:980px;font-size:11px;font-weight:700;letter-spacing:.03em}
+.badge-green{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)}
+.badge-red{background:rgba(232,25,44,.1);color:var(--red);border:1px solid rgba(232,25,44,.2)}
+.badge-grey{background:var(--white4);color:var(--white3);border:1px solid var(--border)}
+.prog-wrap{width:100px;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--red);border-radius:2px}
+.action-btns{display:flex;gap:6px}
+.btn-icon{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--white3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
+.btn-icon:hover{border-color:var(--border2);color:var(--white);background:var(--surface)}
+.btn-icon.danger:hover{border-color:rgba(239,68,68,.4);color:#ef4444;background:rgba(239,68,68,.08)}
+
+/* EMAIL FORM */
+.email-form{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:680px}
+.email-form h3{font-size:18px;font-weight:700;letter-spacing:-.02em;margin-bottom:20px}
+.email-form .f-group{margin-bottom:18px}
+textarea.f-input{min-height:140px;resize:vertical;margin-bottom:0}
+.send-result{margin-top:16px;padding:12px 16px;border-radius:10px;font-size:14px;display:none}
+.send-result.success{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:#22c55e}
+.send-result.error{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#ef4444}
+
+/* USER DETAIL MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;padding:32px;position:relative;animation:modalIn .3s}
+@keyframes modalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--white3);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-close:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.modal-title{font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--white3);margin-bottom:28px}
+.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.detail-stat{background:var(--bg3);border-radius:12px;padding:16px;text-align:center}
+.detail-stat-val{font-size:24px;font-weight:800;color:var(--red);letter-spacing:-.03em;line-height:1;margin-bottom:4px}
+.detail-stat-label{font-size:10px;color:var(--white3);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.module-rows{}
+.module-row-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
+.module-row-item:last-child{border-bottom:none}
+.mr-num{font-size:11px;font-weight:700;color:var(--red);letter-spacing:.06em;width:60px}
+.mr-prog{flex:1}
+.mr-prog-label{font-size:13px;font-weight:600;color:var(--white);margin-bottom:6px}
+.mr-prog-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.mr-prog-fill{height:100%;background:var(--red);border-radius:2px}
+.mr-score{font-size:12px;color:var(--white3);min-width:60px;text-align:right}
+
+/* LOADING */
+.loading{text-align:center;padding:48px;color:var(--white3);font-size:14px}
+.spin{display:inline-block;width:20px;height:20px;border:2px solid var(--border2);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -61,30 +127,77 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <!-- LOGIN -->
 <div class="login-wrap" id="login-wrap">
   <div class="login-box">
-    <h1>Admin <span style="color:#E30613">Panel</span></h1>
-    <p>AI Starter Pack – administratorski pristup</p>
-    <div class="error" id="login-err">Pogrešna lozinka.</div>
-    <label class="f-label">Admin lozinka:</label>
+    <div class="login-logo"><img src="/img/logo.svg" alt="AI Starter Pack"></div>
+    <h1 class="login-title">Admin Panel</h1>
+    <p class="login-sub">AI Starter Pack administratorski pristup</p>
+    <div class="err" id="login-err">Pogrešna lozinka.</div>
+    <label class="f-label">Admin lozinka</label>
     <input type="password" class="f-input" id="admin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="btn" onclick="doLogin()">PRIJAVI SE</button>
+    <button class="btn-login" onclick="doLogin()">Prijavi se →</button>
   </div>
 </div>
 
 <!-- DASHBOARD -->
 <div class="dashboard" id="dashboard">
   <div class="topbar">
-    <h1>AI Starter Pack <span>Admin</span></h1>
-    <button class="logout-btn" onclick="doLogout()">Odjava</button>
-  </div>
-  <div class="content">
-    <div class="section-title">Statistike</div>
-    <div class="stats-grid" id="stats-grid">
-      <div class="loading" style="grid-column:1/-1">Učitavanje...</div>
+    <div class="topbar-left">
+      <div class="topbar-logo"><img src="/img/logo.svg" alt=""></div>
+      <div class="topbar-title">Admin Panel</div>
+      <div class="topbar-badge">AI Starter Pack</div>
     </div>
-    <div class="section-title">Korisnici</div>
-    <input type="text" class="search-bar" placeholder="Pretraži po imenu ili emailu..." oninput="filterUsers(this.value)">
-    <div id="users-wrap"><div class="loading">Učitavanje korisnika...</div></div>
+    <div class="topbar-right">
+      <button class="btn btn-outline btn-sm" onclick="loadStats();loadUsers()">↻ Refresh</button>
+      <button class="btn btn-outline btn-sm" onclick="doLogout()">Odjava</button>
+    </div>
   </div>
+
+  <div class="main-content">
+    <!-- Stats -->
+    <div class="stats-row" id="stats-row">
+      <div class="loading" style="grid-column:1/-1"><span class="spin"></span>Učitavanje...</div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('users',this)">👥 Korisnici</button>
+      <button class="tab" onclick="switchTab('email',this)">✉️ Email svima</button>
+    </div>
+
+    <!-- Users Tab -->
+    <div id="tab-users">
+      <div class="toolbar">
+        <input type="text" class="search-input" placeholder="🔍 Pretraži po imenu ili emailu..." oninput="filterUsers(this.value)">
+        <div style="display:flex;gap:10px">
+          <a class="btn btn-green" href="/api/admin/export/csv" id="export-btn" target="_blank">⬇ Export CSV</a>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <div id="users-table"><div class="loading"><span class="spin"></span>Učitavanje korisnika...</div></div>
+      </div>
+    </div>
+
+    <!-- Email Tab -->
+    <div id="tab-email" style="display:none">
+      <div class="email-form">
+        <h3>✉️ Pošalji email svim korisnicima</h3>
+        <div class="f-group">
+          <label class="f-label">Naslov emaila</label>
+          <input type="text" class="f-input" id="email-subject" placeholder="npr. Novo u kursu!">
+        </div>
+        <div class="f-group">
+          <label class="f-label">Poruka</label>
+          <textarea class="f-input" id="email-body" placeholder="Unesite poruku za sve korisnike..."></textarea>
+        </div>
+        <button class="btn btn-red" onclick="sendEmailAll()" id="send-btn">Pošalji svima →</button>
+        <div class="send-result" id="send-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- USER DETAIL MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modal-box"></div>
 </div>
 
 <script>
@@ -97,11 +210,12 @@ async function doLogin() {
   const pass = document.getElementById('admin-pass').value;
   const err = document.getElementById('login-err');
   try {
-    const res = await fetch('/api/admin/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ password: pass }) });
+    const res = await fetch('/api/admin/login', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pass})});
     const data = await res.json();
     if (!res.ok) { err.classList.add('show'); return; }
     adminToken = data.token;
     localStorage.setItem('adminToken', adminToken);
+    // Set export link auth
     err.classList.remove('show');
     showDashboard();
   } catch { err.classList.add('show'); }
@@ -114,81 +228,166 @@ function doLogout() {
   document.getElementById('login-wrap').style.display = 'flex';
 }
 
-async function showDashboard() {
+function showDashboard() {
   document.getElementById('login-wrap').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
+  // Add auth to export link
+  document.getElementById('export-btn').href = `/api/admin/export/csv?token=${adminToken}`;
   loadStats();
   loadUsers();
 }
 
 async function loadStats() {
   try {
-    const res = await fetch('/api/admin/stats', { headers: { 'Authorization': 'Bearer ' + adminToken } });
+    const res = await fetch('/api/admin/stats', {headers:{'Authorization':'Bearer '+adminToken}});
     const s = await res.json();
-    document.getElementById('stats-grid').innerHTML = `
-      <div class="stat"><div class="stat-val">${s.totalUsers}</div><div class="stat-label">Ukupno korisnika</div></div>
-      <div class="stat"><div class="stat-val">${s.newToday}</div><div class="stat-label">Novi danas</div></div>
-      <div class="stat"><div class="stat-val">${s.totalProgress}</div><div class="stat-label">Lekcija završeno</div></div>
-      <div class="stat"><div class="stat-val">${s.totalQuizzes}</div><div class="stat-label">Kvizova urađeno</div></div>
-      <div class="stat"><div class="stat-val">${s.passedQuizzes}</div><div class="stat-label">Kvizova položeno</div></div>
-      <div class="stat"><div class="stat-val">${s.certificatesEarned}</div><div class="stat-label">Sertifikata</div></div>
-    `;
+    document.getElementById('stats-row').innerHTML = `
+      <div class="stat-card"><div class="stat-val">${s.totalUsers}</div><div class="stat-label">Ukupno</div></div>
+      <div class="stat-card"><div class="stat-val">${s.newToday}</div><div class="stat-label">Danas</div></div>
+      <div class="stat-card"><div class="stat-val">${s.newThisWeek}</div><div class="stat-label">Ove nedelje</div></div>
+      <div class="stat-card"><div class="stat-val">${s.totalProgress}</div><div class="stat-label">Lekcija</div></div>
+      <div class="stat-card"><div class="stat-val">${s.passedQuizzes}</div><div class="stat-label">Kvizova</div></div>
+      <div class="stat-card"><div class="stat-val">${s.certificatesEarned}</div><div class="stat-label">Sertifikata</div></div>`;
   } catch(e) { console.error(e); }
 }
 
 async function loadUsers() {
   try {
-    const res = await fetch('/api/admin/users', { headers: { 'Authorization': 'Bearer ' + adminToken } });
+    const res = await fetch('/api/admin/users', {headers:{'Authorization':'Bearer '+adminToken}});
     allUsers = await res.json();
     renderUsers(allUsers);
-  } catch(e) { document.getElementById('users-wrap').innerHTML = '<div class="loading">Greška pri učitavanju.</div>'; }
+  } catch(e) { document.getElementById('users-table').innerHTML = '<div class="loading">Greška.</div>'; }
 }
 
 function filterUsers(q) {
-  const filtered = allUsers.filter(u =>
-    `${u.firstName} ${u.lastName} ${u.email}`.toLowerCase().includes(q.toLowerCase())
-  );
-  renderUsers(filtered);
+  const f = allUsers.filter(u => `${u.firstName} ${u.lastName} ${u.email}`.toLowerCase().includes(q.toLowerCase()));
+  renderUsers(f);
 }
 
 function renderUsers(users) {
-  if (users.length === 0) { document.getElementById('users-wrap').innerHTML = '<div class="loading">Nema korisnika.</div>'; return; }
-  document.getElementById('users-wrap').innerHTML = `
+  if (!users.length) { document.getElementById('users-table').innerHTML = '<div class="loading">Nema korisnika.</div>'; return; }
+  document.getElementById('users-table').innerHTML = `
     <table>
       <thead><tr>
         <th>Korisnik</th><th>Email</th><th>Registrovan</th>
-        <th>Moduli</th><th>Napredak</th><th>Sertifikat</th><th>Akcija</th>
+        <th>Moduli</th><th>Napredak</th><th>Sertifikat</th><th>Akcije</th>
       </tr></thead>
       <tbody>
         ${users.map(u => `
-          <tr id="row-${u.id}">
-            <td><strong style="color:#fff">${u.firstName} ${u.lastName}</strong></td>
-            <td>${u.email}</td>
-            <td>${new Date(u.createdAt).toLocaleDateString('sr-RS')}</td>
-            <td>${u.completedModules}/7</td>
+          <tr>
+            <td><strong style="color:var(--white)">${u.firstName} ${u.lastName}</strong></td>
+            <td style="color:var(--white3)">${u.email}</td>
+            <td style="color:var(--white3)">${new Date(u.createdAt).toLocaleDateString('sr-RS')}</td>
+            <td><strong>${u.completedModules}</strong>/7</td>
             <td>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar-fill" style="width:${Math.round(u.completedModules/7*100)}%"></div>
+              <div class="prog-wrap">
+                <div class="prog-fill" style="width:${Math.round(u.completedModules/7*100)}%"></div>
               </div>
             </td>
             <td>${u.certificateEarned
               ? '<span class="badge badge-green">✓ Da</span>'
               : '<span class="badge badge-grey">Ne</span>'}</td>
-            <td><button class="delete-btn" onclick="deleteUser('${u.id}','${u.firstName} ${u.lastName}')">Obriši</button></td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-icon" onclick="viewUser('${u.id}')" title="Detalji">👁</button>
+                <button class="btn-icon danger" onclick="deleteUser('${u.id}','${u.firstName} ${u.lastName}')" title="Obriši">🗑</button>
+              </div>
+            </td>
           </tr>`).join('')}
       </tbody>
     </table>`;
 }
 
-async function deleteUser(id, name) {
-  if (!confirm(`Obrisati korisnika "${name}"? Ova akcija je nepovratna.`)) return;
+async function viewUser(id) {
+  document.getElementById('modal-box').innerHTML = '<div class="loading"><span class="spin"></span>Učitavanje...</div>';
+  document.getElementById('modal-overlay').classList.add('open');
   try {
-    await fetch(`/api/admin/users/${id}`, { method:'DELETE', headers:{'Authorization':'Bearer '+adminToken} });
+    const res = await fetch(`/api/admin/users/${id}`, {headers:{'Authorization':'Bearer '+adminToken}});
+    const d = await res.json();
+    const u = d.user;
+    document.getElementById('modal-box').innerHTML = `
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-title">${u.firstName} ${u.lastName}</div>
+      <div class="modal-sub">${u.email} · Registrovan: ${new Date(u.createdAt).toLocaleDateString('sr-RS')}</div>
+      <div class="detail-grid">
+        <div class="detail-stat"><div class="detail-stat-val">${d.totalLessons}</div><div class="detail-stat-label">Lekcija</div></div>
+        <div class="detail-stat"><div class="detail-stat-val">${d.totalQuizzes}</div><div class="detail-stat-label">Kvizova</div></div>
+        <div class="detail-stat"><div class="detail-stat-val">${Object.values(d.moduleDetails).filter(m=>m.passed).length}</div><div class="detail-stat-label">Položeno</div></div>
+        <div class="detail-stat"><div class="detail-stat-val">${Object.values(d.moduleDetails).filter(m=>m.passed).length===7?'✓':'✗'}</div><div class="detail-stat-label">Sertifikat</div></div>
+      </div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--white3);margin-bottom:14px">Napredak po modulima</div>
+      <div class="module-rows">
+        ${Object.entries(d.moduleDetails).map(([m,md]) => `
+          <div class="module-row-item">
+            <div class="mr-num">Modul ${m}</div>
+            <div class="mr-prog">
+              <div class="mr-prog-label">${md.lessonsCompleted}/3 lekcija · ${md.passed?'<span style="color:#22c55e">✓ Položen</span>':md.quizAttempts>0?'<span style="color:var(--red)">✗ Nije položen</span>':'Nije počeo/la'}</div>
+              <div class="mr-prog-bar"><div class="mr-prog-fill" style="width:${Math.round(md.lessonsCompleted/3*100)}%"></div></div>
+            </div>
+            <div class="mr-score">${md.bestScore !== null ? md.bestScore+'%' : '–'}</div>
+          </div>`).join('')}
+      </div>`;
+  } catch(e) { document.getElementById('modal-box').innerHTML = '<div class="loading">Greška.</div>'; }
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modal-overlay'))
+    document.getElementById('modal-overlay').classList.remove('open');
+}
+
+async function deleteUser(id, name) {
+  if (!confirm(`Obrisati "${name}"? Nepovratno!`)) return;
+  try {
+    await fetch(`/api/admin/users/${id}`, {method:'DELETE',headers:{'Authorization':'Bearer '+adminToken}});
     allUsers = allUsers.filter(u => u.id !== id);
     renderUsers(allUsers);
     loadStats();
-  } catch(e) { alert('Greška pri brisanju.'); }
+  } catch(e) { alert('Greška.'); }
 }
+
+async function sendEmailAll() {
+  const subject = document.getElementById('email-subject').value.trim();
+  const message = document.getElementById('email-body').value.trim();
+  const result = document.getElementById('send-result');
+  const btn = document.getElementById('send-btn');
+  if (!subject || !message) { result.textContent='Unesite naslov i poruku.'; result.className='send-result error'; result.style.display='block'; return; }
+  if (!confirm(`Poslati email svim korisnicima (${allUsers.length})?`)) return;
+  btn.disabled = true; btn.textContent = 'Slanje...';
+  try {
+    const res = await fetch('/api/admin/send-email', {
+      method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+adminToken},
+      body:JSON.stringify({subject,message})
+    });
+    const data = await res.json();
+    result.textContent = `✓ Uspešno poslato ${data.sent} od ${data.total} emailova.`;
+    result.className = 'send-result success';
+    result.style.display = 'block';
+    document.getElementById('email-subject').value = '';
+    document.getElementById('email-body').value = '';
+  } catch(e) { result.textContent='Greška pri slanju.'; result.className='send-result error'; result.style.display='block'; }
+  btn.disabled = false; btn.textContent = 'Pošalji svima →';
+}
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-users').style.display = tab==='users' ? 'block' : 'none';
+  document.getElementById('tab-email').style.display = tab==='email' ? 'block' : 'none';
+}
+
+// Fix export with auth header
+document.addEventListener('DOMContentLoaded', () => {
+  const exportBtn = document.getElementById('export-btn');
+  if (exportBtn && adminToken) {
+    exportBtn.onclick = async (e) => {
+      e.preventDefault();
+      const res = await fetch('/api/admin/export/csv', {headers:{'Authorization':'Bearer '+adminToken}});
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='korisnici.csv'; a.click();
+    };
+  }
+});
 </script>
 </body>
 </html>

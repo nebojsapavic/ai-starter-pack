@@ -1,30 +1,38 @@
 const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const FROM = 'AI Starter Pack <noreply@ai-starterpack.edu.rs>';
+
 async function sendWelcomeEmail(firstName, email) {
   try {
     await resend.emails.send({
-      from: 'AI Starter Pack <onboarding@resend.dev>',
+      from: FROM,
       to: email,
       subject: 'Dobrodošao/la na AI Starter Pack! 🎓',
       html: `
-        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0a0a0a;color:#ffffff;padding:40px;border-radius:8px">
-          <img src="https://ai-starter-pack-production.up.railway.app/img/logo.svg" style="height:40px;margin-bottom:32px">
-          <h1 style="color:#E30613;font-size:28px;margin-bottom:16px">Zdravo, ${firstName}! 👋</h1>
-          <p style="color:#aaa;line-height:1.7;margin-bottom:24px">
-            Dobrodošao/la na <strong style="color:#fff">AI Starter Pack</strong> – besplatan online kurs o veštačkoj inteligenciji kroz 7 modula.
-          </p>
-          <p style="color:#aaa;line-height:1.7;margin-bottom:32px">
-            Možeš odmah da počneš sa učenjem. Kurs je dostupan na svim uređajima, tempom koji ti odgovara.
-          </p>
-          <a href="https://ai-starter-pack-production.up.railway.app" 
-             style="background:#E30613;color:#fff;padding:14px 32px;text-decoration:none;font-weight:bold;border-radius:4px;display:inline-block;margin-bottom:32px">
-            Počni kurs →
-          </a>
-          <hr style="border-color:#222;margin-bottom:24px">
-          <p style="color:#555;font-size:12px">
-            AI Starter Pack · ITS · ITHS · Savez za AI Srbije
-          </p>
+        <div style="font-family:'Plus Jakarta Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;border:1px solid #e2e2e7;border-radius:16px;overflow:hidden">
+          <div style="background:#06080f;padding:32px 40px;text-align:center">
+            <img src="https://www.ai-starterpack.edu.rs/img/logo.svg" height="32" style="height:32px">
+          </div>
+          <div style="padding:40px">
+            <h1 style="font-size:26px;font-weight:800;letter-spacing:-.03em;color:#1a1a1a;margin-bottom:12px">Zdravo, ${firstName}! 👋</h1>
+            <p style="font-size:16px;color:#6b6b72;line-height:1.7;margin-bottom:28px">
+              Dobrodošao/la na <strong style="color:#1a1a1a">AI Starter Pack</strong> – besplatan online kurs o veštačkoj inteligenciji kroz 7 modula.
+            </p>
+            <div style="background:#f5f5f7;border-radius:12px;padding:24px;margin-bottom:28px">
+              <p style="font-size:14px;color:#6b6b72;margin-bottom:16px;font-weight:600;text-transform:uppercase;letter-spacing:.05em">Šta te čeka:</p>
+              <div style="display:grid;gap:10px">
+                ${['🟣 7 modula o veštačkoj inteligenciji','⚡ Praktični AI alati odmah primenjivi','🎓 Digitalni sertifikat + 2 ECTS boda','🏆 100€ popust za ITS/ITHS upis'].map(item => `<div style="font-size:14px;color:#3a3a3a">${item}</div>`).join('')}
+              </div>
+            </div>
+            <a href="https://www.ai-starterpack.edu.rs" style="display:inline-block;background:#E8192C;color:#fff;padding:14px 32px;border-radius:980px;text-decoration:none;font-weight:700;font-size:15px">Počni kurs →</a>
+            <p style="font-size:13px;color:#ababb2;margin-top:28px;line-height:1.6">
+              Imaš pitanje? Piši nam na <a href="mailto:upis@its.edu.rs" style="color:#E8192C">upis@its.edu.rs</a>
+            </p>
+          </div>
+          <div style="background:#f5f5f7;padding:20px 40px;border-top:1px solid #e2e2e7;text-align:center">
+            <p style="font-size:12px;color:#ababb2">AI Starter Pack · ITS · ITHS · Savez za AI Srbije</p>
+          </div>
         </div>
       `
     });
@@ -37,31 +45,40 @@ async function sendWelcomeEmail(firstName, email) {
 async function sendCertificateEmail(firstName, lastName, email) {
   try {
     await resend.emails.send({
-      from: 'AI Starter Pack <onboarding@resend.dev>',
+      from: FROM,
       to: email,
       subject: '🎓 Čestitamo! Tvoj AI Starter Pack sertifikat je spreman!',
       html: `
-        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0a0a0a;color:#ffffff;padding:40px;border-radius:8px">
-          <img src="https://ai-starter-pack-production.up.railway.app/img/logo.svg" style="height:40px;margin-bottom:32px">
-          <h1 style="color:#22c55e;font-size:28px;margin-bottom:16px">Čestitamo, ${firstName}! 🎉</h1>
-          <p style="color:#aaa;line-height:1.7;margin-bottom:24px">
-            Uspešno si završio/la kurs <strong style="color:#fff">AI Starter Pack</strong> i položio/la sve kvizove!
-          </p>
-          <div style="background:#111;border:1px solid #E30613;padding:24px;border-radius:8px;margin-bottom:32px;text-align:center">
-            <p style="color:#888;font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px">Sertifikat dodeljuje se</p>
-            <h2 style="color:#E30613;font-size:32px;margin-bottom:16px">${firstName} ${lastName}</h2>
-            <p style="color:#aaa;margin-bottom:16px">za uspešno završen kurs AI Starter Pack</p>
-            <div style="display:inline-flex;gap:12px">
-              <span style="background:#E30613;padding:8px 20px;font-size:12px;font-weight:bold">2 ECTS Boda</span>
-              <span style="background:#E30613;padding:8px 20px;font-size:12px;font-weight:bold">100€ Popust</span>
-            </div>
+        <div style="font-family:'Plus Jakarta Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;border:1px solid #e2e2e7;border-radius:16px;overflow:hidden">
+          <div style="background:#06080f;padding:32px 40px;text-align:center">
+            <img src="https://www.ai-starterpack.edu.rs/img/logo.svg" height="32" style="height:32px">
           </div>
-          <a href="https://ai-starter-pack-production.up.railway.app" 
-             style="background:#22c55e;color:#000;padding:14px 32px;text-decoration:none;font-weight:bold;border-radius:4px;display:inline-block;margin-bottom:32px">
-            Preuzmi sertifikat →
-          </a>
-          <hr style="border-color:#222;margin-bottom:24px">
-          <p style="color:#555;font-size:12px">AI Starter Pack · ITS · ITHS · Savez za AI Srbije</p>
+          <div style="padding:40px">
+            <div style="text-align:center;margin-bottom:32px">
+              <div style="font-size:56px;margin-bottom:16px">🎉</div>
+              <h1 style="font-size:28px;font-weight:800;letter-spacing:-.03em;color:#1a1a1a;margin-bottom:8px">Čestitamo, ${firstName}!</h1>
+              <p style="font-size:16px;color:#6b6b72">Uspešno si završio/la AI Starter Pack kurs!</p>
+            </div>
+            <div style="background:#06080f;border-radius:16px;padding:32px;margin-bottom:28px;text-align:center">
+              <p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px">Sertifikat o završetku</p>
+              <p style="font-size:24px;font-weight:800;color:#fff;margin-bottom:8px">AI Starter Pack</p>
+              <p style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:8px">Dodeljuje se</p>
+              <p style="font-size:28px;font-weight:800;color:#E8192C;margin-bottom:20px">${firstName} ${lastName}</p>
+              <div style="display:inline-flex;gap:12px">
+                <span style="background:#E8192C;color:#fff;padding:8px 20px;border-radius:980px;font-size:12px;font-weight:700">2 ECTS boda</span>
+                <span style="background:#E8192C;color:#fff;padding:8px 20px;border-radius:980px;font-size:12px;font-weight:700">100€ popust</span>
+              </div>
+            </div>
+            <div style="text-align:center">
+              <a href="https://www.ai-starterpack.edu.rs" style="display:inline-block;background:#E8192C;color:#fff;padding:14px 32px;border-radius:980px;text-decoration:none;font-weight:700;font-size:15px">Preuzmi sertifikat →</a>
+            </div>
+            <p style="font-size:13px;color:#ababb2;margin-top:28px;line-height:1.6;text-align:center">
+              Pitanja? <a href="mailto:upis@its.edu.rs" style="color:#E8192C">upis@its.edu.rs</a>
+            </p>
+          </div>
+          <div style="background:#f5f5f7;padding:20px 40px;border-top:1px solid #e2e2e7;text-align:center">
+            <p style="font-size:12px;color:#ababb2">AI Starter Pack · ITS · ITHS · Savez za AI Srbije</p>
+          </div>
         </div>
       `
     });

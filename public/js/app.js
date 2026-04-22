@@ -334,12 +334,19 @@ function renderHome(app) {
 function renderAbout(app) {
   app.innerHTML = `
   <div class="page">
-    <section class="page-hero page-hero-img" style="background-image:url('/img/about-img.png')">
-      <div class="page-hero-overlay"></div>
-      <div class="container" style="position:relative;z-index:2">
-        <div class="section-label" style="color:rgba(255,255,255,.7)">O kursu</div>
-        <h1 class="page-h1" style="color:#fff">AI Starter Pack</h1>
-        <p class="page-sub" style="color:rgba(255,255,255,.75)">Veštačka inteligencija više nije daleka budućnost – ona je tu, u tvom telefonu, pretraživaču, aplikacijama i poslu. Kurs je osmišljen da ti pomogne da razumeš kako AI funkcioniše – bez potrebe za prethodnim znanjem iz programiranja ili matematike.</p>
+    <section class="about-hero-section">
+      <div class="about-hero-bg"></div>
+      <div class="about-hero-overlay"></div>
+      <div class="about-hero-content">
+        <div class="container">
+          <div class="section-label" style="color:rgba(255,100,100,.8)">O kursu</div>
+          <h1 class="page-h1" style="color:#fff;max-width:700px">AI Starter Pack –<br>znanje bez barijera.</h1>
+          <p class="page-sub" style="color:rgba(255,255,255,.6);max-width:600px">Veštačka inteligencija više nije daleka budućnost. Kurs je osmišljen da ti pomogne da razumeš kako AI funkcioniše – bez programiranja, bez matematike, bez predznanja.</p>
+          <div style="display:flex;gap:14px;margin-top:32px;flex-wrap:wrap">
+            <button class="btn btn-red btn-lg" onclick="navigate('register')">Počni besplatno →</button>
+            <button class="btn btn-ghost btn-lg" onclick="navigate('modules')">Pogledaj module</button>
+          </div>
+        </div>
       </div>
     </section>
 

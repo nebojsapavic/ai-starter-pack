@@ -90,7 +90,7 @@ nav.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.08)}
   background-size:80px 80px;
   mask-image:radial-gradient(ellipse at center,black 40%,transparent 80%);
 }
-.hero-inner{position:relative;z-index:3;max-width:860px;animation:heroIn .8s .1s both}
+.hero-inner{position:relative;z-index:3;max-width:860px;animation:heroIn .8s .1s both;text-align:center;width:100%;margin:0 auto}
 @keyframes heroIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;
@@ -115,7 +115,7 @@ nav.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.08)}
 .hero-p{
   font-size:clamp(17px,2vw,21px);font-weight:300;
   color:rgba(255,255,255,.6);line-height:1.65;
-  max-width:600px;margin:0 auto 52px;
+  max-width:600px;margin:0 auto 52px;text-align:center;
   animation:fadeUp .6s .5s both;
 }
 .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;animation:fadeUp .6s .6s both}

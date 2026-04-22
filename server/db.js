@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema({
   password: String,
   birthYear: Number,
   postalCode: String,
+  isVerified: { type: Boolean, default: false },
+  verificationToken: String,
+  lastActiveAt: { type: Date, default: Date.now },
   createdAt: { type: Date, default: Date.now }
 });
 const User = mongoose.model('User', userSchema);

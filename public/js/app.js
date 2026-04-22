@@ -33,6 +33,7 @@ function navigate(page, params = {}) {
   else if (page === 'login') renderLogin(app);
   else if (page === 'profile') renderProfile(app);
   else if (page === 'forgot-password') renderForgotPassword(app);
+  else if (page === 'verify') renderVerifyEmail(app, params);
   else if (page === 'reset-password') renderResetPassword(app, params);
   else if (page === 'register') renderRegister(app);
   else render404(app);
@@ -1077,7 +1078,7 @@ function renderLogin(app) {
         <div class="auth-field-group">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <label class="auth-label">Lozinka</label>
-            <a onclick="navigate('forgot-password')" style="font-size:12px;color:var(--red);font-weight:600;text-decoration:none;cursor:pointer">Zaboravio/la?</a>
+            <a href="#" style="font-size:12px;color:var(--red);font-weight:600;text-decoration:none">Zaboravio/la?</a>
           </div>
           <div class="auth-input-wrap">
             <span class="auth-input-icon">🔒</span>
@@ -1212,7 +1213,16 @@ async function doRegister() {
   if (password.length < 6) { showErr(err, 'Lozinka mora imati najmanje 6 karaktera.'); return; }
   if (password !== pass2) { showErr(err, 'Lozinke se ne podudaraju.'); return; }
   if (!agreed) { showErr(err, 'Morate prihvatiti Politiku privatnosti i Uslove korišćenja.'); return; }
-  try { await API.register({ firstName, lastName, email, password, birthYear, postalCode }); updateNav(); showToast('Dobrodošao/la! Nalog je kreiran. 🎉', 'success'); navigate('dashboard'); }
+  try {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ firstName, lastName, email, password, birthYear, postalCode })
+    });
+    const data = await res.json();
+    if (!res.ok) { showErr(err, data.error); return; }
+    navigate('verify', { email });
+  }
   catch (e) { showErr(err, e.message); }
 }
 
@@ -1706,13 +1716,96 @@ async function doResetPassword(token) {
   } catch(e) { showErr(err, 'Greška na serveru.'); }
 }
 
+
+// ============================================================
+// EMAIL VERIFICATION
+// ============================================================
+function renderVerifyEmail(app, params = {}) {
+  const email = params.email || '';
+  const token = params.token || new URLSearchParams(window.location.hash.split('?')[1] || '').get('token') || '';
+
+  if (token) {
+    // Auto-verify if token present
+    app.innerHTML = `
+    <div class="page auth-page">
+      <div class="auth-split-left">
+        <div class="auth-left-content">
+          <div class="auth-left-logo">${logoSVG(32)}</div>
+          <h2 class="auth-left-title">Verifikacija<br>emaila ✉️</h2>
+          <div class="auth-left-img"><img src="/img/hero-bg.png" alt="AI"></div>
+        </div>
+      </div>
+      <div class="auth-split-right">
+        <div class="auth-form-wrap" style="text-align:center">
+          <div style="font-size:64px;margin-bottom:20px" id="verify-icon">⏳</div>
+          <h2 class="auth-form-title" id="verify-title">Verifikacija u toku...</h2>
+          <p class="auth-form-sub" id="verify-sub">Molimo sačekaj.</p>
+        </div>
+      </div>
+    </div>`;
+
+    fetch('/api/auth/verify/' + token)
+      .then(r => r.json())
+      .then(data => {
+        if (data.ok) {
+          document.getElementById('verify-icon').textContent = '🎉';
+          document.getElementById('verify-title').textContent = 'Email potvrđen!';
+          document.getElementById('verify-sub').innerHTML = 'Nalog je aktiviran. Sada se možeš prijaviti.<br><br><button class="auth-submit" onclick="navigate('login')" style="margin-top:16px">Prijavi se →</button>';
+        } else {
+          document.getElementById('verify-icon').textContent = '❌';
+          document.getElementById('verify-title').textContent = 'Greška';
+          document.getElementById('verify-sub').textContent = data.error || 'Nevažeći link.';
+        }
+      })
+      .catch(() => {
+        document.getElementById('verify-icon').textContent = '❌';
+        document.getElementById('verify-title').textContent = 'Greška na serveru';
+      });
+    return;
+  }
+
+  // Show "check email" message
+  app.innerHTML = `
+  <div class="page auth-page">
+    <div class="auth-split-left">
+      <div class="auth-left-content">
+        <div class="auth-left-logo">${logoSVG(32)}</div>
+        <h2 class="auth-left-title">Proveri<br>inbox! 📬</h2>
+        <p class="auth-left-sub">Poslali smo ti email sa linkom za aktivaciju naloga.</p>
+        <div class="auth-left-img"><img src="/img/hero-bg.png" alt="AI"></div>
+      </div>
+    </div>
+    <div class="auth-split-right">
+      <div class="auth-form-wrap" style="text-align:center">
+        <div style="font-size:80px;margin-bottom:24px">📬</div>
+        <h2 class="auth-form-title">Proveri email!</h2>
+        <p style="font-size:16px;color:var(--text3);line-height:1.7;margin-bottom:8px">Poslali smo verifikacioni email na:</p>
+        <p style="font-size:17px;font-weight:700;color:var(--red);margin-bottom:24px">${email}</p>
+        <p style="font-size:14px;color:var(--text4);line-height:1.65;margin-bottom:32px">Klikni na link u emailu da aktiviraš nalog. Proveri i <strong>spam folder</strong> ako ne vidiš email.</p>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:left;margin-bottom:24px">
+          <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px">Šta sad?</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.8">
+            1. Otvori email od <strong>noreply@ai-starterpack.edu.rs</strong><br>
+            2. Klikni na "Potvrdi email adresu"<br>
+            3. Vrati se ovde i prijavi se
+          </div>
+        </div>
+        <button class="auth-alt-btn" onclick="navigate('login')">← Nazad na prijavu</button>
+      </div>
+    </div>
+  </div>`;
+}
+
 // INIT
 updateNav();
 showHamburger();
-// Check for reset password token in URL
+// Check for tokens in URL
 const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
-if (hashParams.get('token')) {
+const hashPath = window.location.hash.split('?')[0].replace('#', '');
+if (hashPath === 'reset-password' && hashParams.get('token')) {
   navigate('reset-password', { token: hashParams.get('token') });
+} else if (hashPath === 'verify' && hashParams.get('token')) {
+  navigate('verify', { token: hashParams.get('token') });
 } else {
   navigate('home');
 }

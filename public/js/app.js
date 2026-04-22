@@ -444,44 +444,102 @@ async function renderModules(app, params) {
   await loadProgress();
   const user = API.getUser();
 
-  const cards = MODULES.map(m => {
+  const moduleData = [
+    { emoji:'🟣', color:'#8b5cf6', light:'rgba(139,92,246,.08)', topics:['Osnove AI','Mašinsko učenje','Uska vs opšta AI','Svakodnevni primeri'] },
+    { emoji:'🔵', color:'#3b82f6', light:'rgba(59,130,246,.08)', topics:['Algoritmi pretrage','Logika odlučivanja','Igre i simulacije','Optimizacija'] },
+    { emoji:'🟢', color:'#22c55e', light:'rgba(34,197,94,.08)', topics:['Nadgledano učenje','Klasifikacija','Regresija','Predikcija'] },
+    { emoji:'🔴', color:'#ef4444', light:'rgba(239,68,68,.08)', topics:['Neuronske mreže','Backpropagation','CNN','Transformeri'] },
+    { emoji:'🧩', color:'#f59e0b', light:'rgba(245,158,11,.08)', topics:['AI za produktivnost','ChatGPT alati','Organizacija','Pisanje i analize'] },
+    { emoji:'⚖️', color:'#6366f1', light:'rgba(99,102,241,.08)', topics:['Etika AI','Privatnost','Deepfake','Odgovornost'] },
+    { emoji:'🌐', color:'#14b8a6', light:'rgba(20,184,166,.08)', topics:['Tržište rada','Obrazovanje','Geopolitika','AI 2030'] },
+  ];
+
+  const cards = MODULES.map((m, idx) => {
     const mp = getModuleProgress(m.id);
     const done = lessonsDone(m.id);
     const total = m.lessons.length;
     const pct = Math.round((done / total) * 100);
     const isCompleted = mp.completed;
+    const md = moduleData[idx];
     let statusLabel = 'Nije početo';
     if (isCompleted) statusLabel = '✓ Završeno';
     else if (done > 0) statusLabel = done + '/' + total + ' lekcija';
 
     return `
-    <div class="mod-card${isCompleted ? ' completed' : ''}" onclick="openModuleModal(${m.id})">
-      <div class="mod-top">
-        <div class="mod-num">${m.id.toString().padStart(2,'0')}</div>
-        <div class="mod-status">${statusLabel}</div>
+    <div class="mod-card-premium${isCompleted ? ' completed' : ''}" onclick="openModuleModal(${m.id})" style="--mod-color:${md.color};--mod-light:${md.light};animation-delay:${idx * 0.06}s">
+      <div class="mcp-header">
+        <div class="mcp-num">0${m.id}</div>
+        <div class="mcp-status${isCompleted ? ' done' : done > 0 ? ' progress' : ''}">${statusLabel}</div>
       </div>
-      <div class="mod-emoji">${m.emoji}</div>
-      <div class="mod-title">${m.title}</div>
-      <div class="mod-desc">${m.desc.substring(0,90)}…</div>
-      <div class="mod-progress"><div class="mod-progress-bar" style="width:${pct}%"></div></div>
-      <button class="mod-btn">${isCompleted ? 'Ponovi modul' : done > 0 ? 'Nastavi →' : 'Saznaj više →'}</button>
+      <div class="mcp-emoji">${md.emoji}</div>
+      <div class="mcp-title">${m.title}</div>
+      <div class="mcp-topics">
+        ${md.topics.map(t => `<span class="mcp-topic">${t}</span>`).join('')}
+      </div>
+      <div class="mcp-progress-wrap">
+        <div class="mcp-progress-track"><div class="mcp-progress-fill" style="width:${pct}%"></div></div>
+        <span class="mcp-pct">${pct}%</span>
+      </div>
+      <div class="mcp-footer">
+        <span class="mcp-lessons">${total} lekcije · 1 kviz</span>
+        <span class="mcp-cta">${isCompleted ? 'Ponovi →' : done > 0 ? 'Nastavi →' : 'Počni →'}</span>
+      </div>
     </div>`;
   }).join('');
 
+  const heroImg = `
+    <div class="modules-page-hero-img">
+      <img src="/img/modules-img.png" alt="AI moduli">
+      <div class="mph-overlay"></div>
+    </div>`;
+
   app.innerHTML = `
   <div class="page">
-    <section class="page-hero">
-      <div class="container">
-        <div class="section-label">Kurs</div>
-        <h1 class="page-h1">7 modula, 21 lekcija,<br>sve što treba da znaš o AI.</h1>
-        <p class="page-sub">Kroz zanimljive primere, praktične vežbe i realne AI alate, učićeš sve što ti je potrebno da budeš na TI sa veštačkom inteligencijom.</p>
-        ${user && userProgress ? `<div class="progress-overview">Završeni moduli: <strong>${userProgress.completedModules}/${userProgress.totalModules}</strong>${userProgress.certificateEarned ? ' &nbsp;·&nbsp; <span style="color:#16a34a">🎓 Sertifikat dostupan!</span>' : ''}</div>` : ''}
+    <section class="modules-page-hero">
+      ${heroImg}
+      <div class="mph-content">
+        <div class="container">
+          <div class="section-label" style="color:rgba(255,100,100,.8)">Kurs</div>
+          <h1 class="page-h1" style="color:#fff">7 modula.<br>21 lekcija.<br>Sve o AI.</h1>
+          <p class="page-sub" style="color:rgba(255,255,255,.6)">Učiš kroz praktične primere, realne AI alate i kratke kvizove koji proveravaju znanje.</p>
+          ${user && userProgress ? `
+          <div class="mph-progress-bar-wrap">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+              <span style="font-size:13px;color:rgba(255,255,255,.5);font-weight:600">UKUPNI NAPREDAK</span>
+              <span style="font-size:13px;color:#fff;font-weight:700">${userProgress.completedModules}/7 modula</span>
+            </div>
+            <div style="height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden">
+              <div style="height:100%;width:${Math.round(userProgress.completedModules/7*100)}%;background:linear-gradient(90deg,var(--red),#ff6b6b);border-radius:3px;transition:width 1s ease"></div>
+            </div>
+            ${userProgress.certificateEarned ? '<div style="margin-top:16px"><button class="btn btn-green" onclick="navigate('certificate')">🎓 Preuzmi sertifikat</button></div>' : ''}
+          </div>` : `
+          <div style="margin-top:32px;display:flex;gap:12px;flex-wrap:wrap">
+            <button class="btn btn-red btn-lg" onclick="navigate('register')">Počni besplatno →</button>
+            <button class="btn btn-ghost btn-lg" onclick="navigate('about')">O kursu</button>
+          </div>`}
+        </div>
       </div>
     </section>
-    <div class="container">
-      <div class="modules-grid">${cards}</div>
-    </div>
-    <div class="div-h"></div>
+
+    <section style="padding:80px 0 120px;background:var(--bg2)">
+      <div class="container">
+        <div class="modules-premium-grid">
+          ${cards}
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:80px 0;background:#fff;border-top:1px solid var(--border)">
+      <div class="container" style="text-align:center">
+        <div class="section-label" style="justify-content:center">Spreman/na?</div>
+        <h2 class="section-title" style="max-width:560px;margin:0 auto 16px">Počni kurs danas –<br>potpuno besplatno.</h2>
+        <p style="font-size:17px;color:var(--text3);margin-bottom:36px">Nema roka, nema pritiska. Učiš sopstvenim tempom.</p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <button class="btn btn-red btn-lg" onclick="navigate('register')" style="font-size:16px;padding:16px 40px">Registruj se besplatno</button>
+          <button class="btn btn-outline btn-lg" onclick="navigate('faq')">Imam pitanje →</button>
+        </div>
+      </div>
+    </section>
   </div>`;
 }
 
@@ -865,39 +923,100 @@ async function renderCertificate(app) {
 // ============================================================
 function renderFaq(app) {
   const faqs = [
-    ['Da li je kurs stvarno besplatan?','Da! Kurs je potpuno besplatan za sve korisnike. Dovoljno je da se registruješ i možeš odmah da počneš sa učenjem.'],
-    ['Da li moram da znam programiranje?','Ne. Kurs je osmišljen za sve – bez obzira na prethodno znanje. Nema kodiranja, samo jednostavna i jasna objašnjenja.'],
-    ['Koliko vremena mi je potrebno?','Kurs ima 7 modula sa po 3 lekcije. Svaki modul traje oko 1–1.5 sat, ali tempo određuješ ti – učiš kad hoćeš.'],
-    ['Da li mogu da učim preko telefona?','Naravno! Kurs je dostupan na svim uređajima – telefonu, tabletu ili računaru. Potrebna je internet veza.'],
-    ['Kako se dobija sertifikat?','Za sertifikat trebaš završiti sve lekcije u svih 7 modula i položiti svaki kviz sa min. 40% tačnih odgovora. Sertifikat nosi 2 ECTS boda i 100€ popust za ITS/ITHS.'],
-    ['Šta ako ne položim kviz?','Nema problema! Možeš ponovo proći lekcije i pokušati kviz koliko god puta želiš. Nema vremenskog ograničenja.'],
-    ['Da li mogu da se vratim na prethodne lekcije?','Apsolutno. Imaš stalni pristup svim lekcijama i možeš ih ponovo čitati kad god poželiš.'],
-    ['Može li se kurs koristiti u školama?','Da! Idealan je za kolektivno učenje u školama i firmama. Kontaktiraj nas na upis@its.edu.rs za implementaciju.'],
-    ['Da li je kurs dostupan van Srbije?','Da, svi koji govore srpski mogu pristupiti kursu bez obzira na lokaciju.'],
-    ['Imam još pitanja – kome da se obratim?','Piši nam na upis@its.edu.rs ili pozovi +381 (0)11/40-11-216. Viber/WhatsApp: +381 (0)65/20-15-880. Lokacija: Savski nasip 7, Novi Beograd.'],
+    { icon:'💰', q:'Da li je kurs stvarno besplatan?', a:'Da! Kurs je potpuno besplatan za sve korisnike. Dovoljno je da se registruješ i možeš odmah da počneš sa učenjem. Nema skrivenih troškova ni pretplata.' },
+    { icon:'💻', q:'Da li moram da znam programiranje?', a:'Ne. Kurs je osmišljen za sve – bez obzira na prethodno znanje. Nema kodiranja, samo jednostavna i jasna objašnjenja koja razume svako.' },
+    { icon:'⏳', q:'Koliko vremena mi je potrebno?', a:'Kurs ima 7 modula sa po 3 lekcije. Svaki modul traje oko 1–1.5 sat, ali tempo određuješ ti – učiš kad hoćeš i zaustaviš se kada hoćeš.' },
+    { icon:'📱', q:'Da li mogu da učim preko telefona?', a:'Naravno! Kurs je dostupan na svim uređajima – telefonu, tabletu ili računaru. Dovoljno je da imaš internet vezu.' },
+    { icon:'🎓', q:'Kako se dobija sertifikat?', a:'Za sertifikat trebaš završiti sve lekcije u svih 7 modula i položiti svaki kviz sa min. 40% tačnih odgovora. Sertifikat nosi 2 ECTS boda i 100€ popust za upis na ITS ili ITHS.' },
+    { icon:'🔁', q:'Šta ako ne položim kviz?', a:'Nema problema! Možeš ponovo proći lekcije i pokušati kviz koliko god puta želiš. Nema vremenskog ograničenja ni kazne za ponovni pokušaj.' },
+    { icon:'📚', q:'Da li mogu da se vratim na prethodne lekcije?', a:'Apsolutno. Imaš stalni pristup svim lekcijama i možeš ih ponovo čitati kad god poželiš.' },
+    { icon:'🏫', q:'Može li se kurs koristiti u školama?', a:'Da! Idealan je za kolektivno učenje u školama i firmama. Kontaktiraj nas na upis@its.edu.rs za implementaciju.' },
+    { icon:'🌍', q:'Da li je kurs dostupan van Srbije?', a:'Da, svi koji govore srpski mogu pristupiti kursu bez obzira gde se nalaze u svetu.' },
+    { icon:'📧', q:'Imam još pitanja – kome da se obratim?', a:'Piši nam na upis@its.edu.rs ili pozovi +381 (0)11/40-11-216. Viber/WhatsApp: +381 (0)65/20-15-880. Lokacija: Savski nasip 7, Novi Beograd.' },
   ];
+
+  const categories = [
+    { label: 'Opšte', icon: '📋', items: [0,1,2,3] },
+    { label: 'Sertifikat', icon: '🎓', items: [4,5,6] },
+    { label: 'Dostupnost', icon: '🌐', items: [7,8,9] },
+  ];
+
   app.innerHTML = `
   <div class="page">
-    <section class="page-hero">
-      <div class="container">
-        <div class="section-label">Pitanja i odgovori</div>
-        <h1 class="page-h1">Sve što te zanima<br>pre nego što kreneš.</h1>
+    <section class="faq-hero">
+      <div class="faq-hero-bg"></div>
+      <div class="faq-hero-overlay"></div>
+      <div class="container faq-hero-content">
+        <div class="section-label" style="color:rgba(255,100,100,.8)">Pitanja i odgovori</div>
+        <h1 class="page-h1" style="color:#fff">Sve što te zanima<br>pre nego što kreneš.</h1>
+        <p class="page-sub" style="color:rgba(255,255,255,.55)">Najčešća pitanja o kursu, sertifikatu i pristupu.</p>
+        <div class="faq-search-wrap">
+          <input type="text" class="faq-search" placeholder="Pretraži pitanja..." oninput="filterFaq(this.value)" id="faq-search">
+          <span class="faq-search-icon">🔍</span>
+        </div>
       </div>
     </section>
-    <div class="container">
-      <div class="faq-list">
-        ${faqs.map(([q, a], i) => `
-          <div class="faq-item">
-            <button class="faq-q" onclick="toggleFaq(this)">
-              <span>${i+1}. ${q}</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-a"><div class="faq-a-inner">${a}</div></div>
-          </div>`).join('')}
+
+    <section style="padding:80px 0 40px">
+      <div class="container">
+        <div class="faq-cats">
+          ${categories.map((c,i) => `
+            <button class="faq-cat${i===0?' active':''}" onclick="filterFaqCat(this,${JSON.stringify(c.items)})">${c.icon} ${c.label}</button>
+          `).join('')}
+          <button class="faq-cat" onclick="filterFaqCat(this,'all')">📋 Sva pitanja</button>
+        </div>
       </div>
-    </div>
-    <div class="div-h"></div>
+    </section>
+
+    <section style="padding:0 0 80px">
+      <div class="container">
+        <div class="faq-grid" id="faq-grid">
+          ${faqs.map(({icon,q,a}, i) => `
+            <div class="faq-card reveal" data-index="${i}" style="--delay:${(i%3)*0.07}s">
+              <div class="faq-card-icon">${icon}</div>
+              <div class="faq-card-body">
+                <div class="faq-card-q">${q}</div>
+                <div class="faq-card-a">${a}</div>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-cta-section">
+      <div class="faq-cta-bg"></div>
+      <div class="container faq-cta-inner reveal-scale">
+        <div style="font-size:48px;margin-bottom:20px">💬</div>
+        <h2 class="section-title" style="color:#fff;max-width:500px;margin:0 auto 16px">Nisi našao/la odgovor?</h2>
+        <p style="font-size:17px;color:rgba(255,255,255,.55);margin-bottom:36px;max-width:400px;margin:0 auto 36px">Naš tim je tu za tebe. Piši nam i odgovorićemo brzo.</p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <a href="mailto:upis@its.edu.rs" class="btn btn-red btn-lg">✉️ Piši nam</a>
+          <button class="btn btn-ghost btn-lg" onclick="navigate('register')">Počni kurs →</button>
+        </div>
+        <div style="margin-top:28px;font-size:14px;color:rgba(255,255,255,.35);display:flex;gap:24px;justify-content:center;flex-wrap:wrap">
+          <span>📞 +381 11 40-11-216</span>
+          <span>📱 +381 65 20-15-880</span>
+          <span>📍 Savski nasip 7, Novi Beograd</span>
+        </div>
+      </div>
+    </section>
   </div>`;
+}
+
+function filterFaq(q) {
+  document.querySelectorAll('.faq-card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = text.includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+
+function filterFaqCat(btn, items) {
+  document.querySelectorAll('.faq-cat').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.faq-card').forEach(card => {
+    if (items === 'all') { card.style.display = ''; return; }
+    card.style.display = items.includes(parseInt(card.dataset.index)) ? '' : 'none';
+  });
 }
 
 function toggleFaq(btn) {

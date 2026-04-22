@@ -1039,20 +1039,42 @@ function toggleFaq(btn) {
 function renderLogin(app) {
   app.innerHTML = `
   <div class="page auth-page">
-    <div class="auth-bg"></div>
-    <div class="auth-wrap">
-      <div class="auth-tabs">
-        <button class="auth-tab active" onclick="navigate('login')">Prijava</button>
-        <button class="auth-tab" onclick="navigate('register')">Registracija</button>
+    <div class="auth-split-left">
+      <div class="auth-left-content">
+        <div class="auth-left-logo">${logoSVG(32)}</div>
+        <h2 class="auth-left-title">Dobrodošao/la<br>nazad! 👋</h2>
+        <p class="auth-left-sub">Nastavi tamo gde si stao/la. Tvoj napredak te čeka.</p>
+        <div class="auth-left-stats">
+          <div class="als-item"><div class="als-val">7</div><div class="als-label">Modula</div></div>
+          <div class="als-item"><div class="als-val">21</div><div class="als-label">Lekcija</div></div>
+          <div class="als-item"><div class="als-val">100%</div><div class="als-label">Besplatno</div></div>
+        </div>
+        <div class="auth-left-img">
+          <img src="/img/hero-bg.png" alt="AI">
+        </div>
       </div>
-      <div class="auth-box">
-        <h2>Prijava</h2>
-        <div class="f-error" id="login-err"></div>
-        <div class="f-group"><label class="f-label">Email adresa</label><input type="email" class="f-input" id="l-email" placeholder="tvoj@email.com"></div>
-        <div class="f-group"><label class="f-label">Lozinka</label><input type="password" class="f-input" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-        <button class="f-submit" onclick="doLogin()">Prijavi se</button>
-        <div class="f-alt" style="margin-top:10px;color:var(--text4)">Zaboravio/la lozinku? <a href="#">Resetuj ovde</a></div>
-        <div class="f-alt">Nemaš nalog? <a onclick="navigate('register')">Registruj se</a></div>
+    </div>
+    <div class="auth-split-right">
+      <div class="auth-form-wrap">
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="navigate('login')">Prijava</button>
+          <button class="auth-tab" onclick="navigate('register')">Registracija</button>
+        </div>
+        <div class="auth-box">
+          <h2>Prijava</h2>
+          <div class="f-error" id="login-err"></div>
+          <div class="f-group">
+            <label class="f-label">Email adresa</label>
+            <input type="email" class="f-input" id="l-email" placeholder="tvoj@email.com" autocomplete="email">
+          </div>
+          <div class="f-group">
+            <label class="f-label">Lozinka</label>
+            <input type="password" class="f-input" id="l-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+          </div>
+          <button class="f-submit" onclick="doLogin()">Prijavi se →</button>
+          <div class="f-alt" style="margin-top:12px">Zaboravio/la lozinku? <a href="#">Resetuj ovde</a></div>
+          <div class="f-alt">Nemaš nalog? <a onclick="navigate('register')">Registruj se besplatno</a></div>
+        </div>
       </div>
     </div>
   </div>`;
@@ -1072,35 +1094,52 @@ function renderRegister(app) {
   for (let y = 2010; y >= 1940; y--) years.push(`<option value="${y}"${y===2000?' selected':''}>${y}</option>`);
   app.innerHTML = `
   <div class="page auth-page">
-    <div class="auth-bg"></div>
-    <div class="auth-wrap">
-      <div class="auth-tabs">
-        <button class="auth-tab" onclick="navigate('login')">Prijava</button>
-        <button class="auth-tab active" onclick="navigate('register')">Registracija</button>
+    <div class="auth-split-left">
+      <div class="auth-left-content">
+        <div class="auth-left-logo">${logoSVG(32)}</div>
+        <h2 class="auth-left-title">Počni svoju<br>AI avanturu! 🚀</h2>
+        <p class="auth-left-sub">Pridruži se hiljadama koji uče veštačku inteligenciju. Besplatno, bez roka, bez pritiska.</p>
+        <div class="auth-perks">
+          <div class="auth-perk"><span class="ap-icon">🎓</span><span>Digitalni sertifikat po završetku</span></div>
+          <div class="auth-perk"><span class="ap-icon">⚡</span><span>Odmah pristupi svim modulima</span></div>
+          <div class="auth-perk"><span class="ap-icon">🏆</span><span>2 ECTS boda + 100€ popust</span></div>
+          <div class="auth-perk"><span class="ap-icon">🆓</span><span>Potpuno besplatno zauvek</span></div>
+        </div>
+        <div class="auth-left-img">
+          <img src="/img/modules-img.png" alt="AI moduli">
+        </div>
       </div>
-      <div class="auth-box">
-        <h2>Registracija</h2>
-        <div class="f-error" id="reg-err"></div>
-        <div class="f-row">
-          <div class="f-group"><label class="f-label">Ime</label><input type="text" class="f-input" id="r-first" placeholder="Ime"></div>
-          <div class="f-group"><label class="f-label">Prezime</label><input type="text" class="f-input" id="r-last" placeholder="Prezime"></div>
+    </div>
+    <div class="auth-split-right">
+      <div class="auth-form-wrap">
+        <div class="auth-tabs">
+          <button class="auth-tab" onclick="navigate('login')">Prijava</button>
+          <button class="auth-tab active" onclick="navigate('register')">Registracija</button>
         </div>
-        <div class="f-group"><label class="f-label">Email adresa</label><input type="email" class="f-input" id="r-email" placeholder="tvoj@email.com"></div>
-        <div class="f-row">
-          <div class="f-group"><label class="f-label">Lozinka</label><input type="password" class="f-input" id="r-pass" placeholder="min. 6 karaktera"></div>
-          <div class="f-group"><label class="f-label">Potvrdi lozinku</label><input type="password" class="f-input" id="r-pass2" placeholder="••••••••"></div>
+        <div class="auth-box">
+          <h2>Registracija</h2>
+          <div class="f-error" id="reg-err"></div>
+          <div class="f-row">
+            <div class="f-group"><label class="f-label">Ime</label><input type="text" class="f-input" id="r-first" placeholder="Ime" autocomplete="given-name"></div>
+            <div class="f-group"><label class="f-label">Prezime</label><input type="text" class="f-input" id="r-last" placeholder="Prezime" autocomplete="family-name"></div>
+          </div>
+          <div class="f-group"><label class="f-label">Email adresa</label><input type="email" class="f-input" id="r-email" placeholder="tvoj@email.com" autocomplete="email"></div>
+          <div class="f-row">
+            <div class="f-group"><label class="f-label">Lozinka</label><input type="password" class="f-input" id="r-pass" placeholder="min. 6 karaktera"></div>
+            <div class="f-group"><label class="f-label">Potvrdi lozinku</label><input type="password" class="f-input" id="r-pass2" placeholder="••••••••"></div>
+          </div>
+          <div class="f-row">
+            <div class="f-group"><label class="f-label">Godina rođenja</label><select class="f-input f-select" id="r-year">${years.join('')}</select></div>
+            <div class="f-group"><label class="f-label">Poštanski broj</label><input type="text" class="f-input" id="r-postal" placeholder="11000"></div>
+          </div>
+          <div class="checks">
+            <label class="f-check-row"><input type="checkbox" class="f-check" id="r-c1"> <span class="f-check-label">Pristajem na anonimnu statističku upotrebu podataka o napretku.</span></label>
+            <label class="f-check-row"><input type="checkbox" class="f-check" id="r-c2"> <span class="f-check-label">Želim da primam informacije o novim kursevima. (opciono)</span></label>
+            <label class="f-check-row"><input type="checkbox" class="f-check" id="r-c3"> <span class="f-check-label">Prihvatam <a href="#">Politiku privatnosti</a> i <a href="#">Uslove korišćenja</a>. <strong>(obavezno)</strong></span></label>
+          </div>
+          <button class="f-submit" onclick="doRegister()">Registruj se besplatno →</button>
+          <div class="f-alt">Već imaš nalog? <a onclick="navigate('login')">Prijavi se</a></div>
         </div>
-        <div class="f-row">
-          <div class="f-group"><label class="f-label">Godina rođenja</label><select class="f-input f-select" id="r-year">${years.join('')}</select></div>
-          <div class="f-group"><label class="f-label">Poštanski broj</label><input type="text" class="f-input" id="r-postal" placeholder="11000"></div>
-        </div>
-        <div class="checks">
-          <label class="f-check-row"><input type="checkbox" class="f-check" id="r-c1"> <span class="f-check-label">Pristajem da se podaci o napretku koriste u statističke svrhe (anonimno).</span></label>
-          <label class="f-check-row"><input type="checkbox" class="f-check" id="r-c2"> <span class="f-check-label">Želim da primam informacije o novim kursevima. (opciono)</span></label>
-          <label class="f-check-row"><input type="checkbox" class="f-check" id="r-c3"> <span class="f-check-label">Prihvatam <a href="#">Politiku privatnosti</a> i <a href="#">Uslove korišćenja</a>. <strong>(obavezno)</strong></span></label>
-        </div>
-        <button class="f-submit" onclick="doRegister()">Registruj se besplatno</button>
-        <div class="f-alt">Već imaš nalog? <a onclick="navigate('login')">Prijavi se</a></div>
       </div>
     </div>
   </div>`;

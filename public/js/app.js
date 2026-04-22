@@ -30,9 +30,9 @@ function navigate(page, params = {}) {
   else if (page === 'faq') renderFaq(app);
   else if (page === 'privacy') renderPrivacy(app);
   else if (page === 'terms') renderTerms(app);
-  else render404(app);
   else if (page === 'login') renderLogin(app);
   else if (page === 'register') renderRegister(app);
+  else render404(app);
 
   setTimeout(() => {
     document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {

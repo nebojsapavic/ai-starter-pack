@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
   postalCode: String,
   createdAt: { type: Date, default: Date.now }
 });
+const User = mongoose.model('User', userSchema);
 
 // Progress
 const progressSchema = new mongoose.Schema({
@@ -23,6 +24,7 @@ const progressSchema = new mongoose.Schema({
   lessonId: Number,
   completedAt: { type: Date, default: Date.now }
 });
+const Progress = mongoose.model('Progress', progressSchema);
 
 // Quiz Results
 const quizSchema = new mongoose.Schema({
@@ -34,7 +36,7 @@ const quizSchema = new mongoose.Schema({
   passed: Boolean,
   submittedAt: { type: Date, default: Date.now }
 });
-
+const QuizResult = mongoose.model('QuizResult', quizSchema);
 
 // Password Reset
 const passwordResetSchema = new mongoose.Schema({

@@ -1750,7 +1750,7 @@ function renderVerifyEmail(app, params = {}) {
         if (data.ok) {
           document.getElementById('verify-icon').textContent = '🎉';
           document.getElementById('verify-title').textContent = 'Email potvrđen!';
-          document.getElementById('verify-sub').innerHTML = 'Nalog je aktiviran. Sada se možeš prijaviti.<br><br><button class="auth-submit" onclick="navigate('login')" style="margin-top:16px">Prijavi se →</button>';
+          document.getElementById('verify-sub').innerHTML = 'Nalog je aktiviran! Klikni <a onclick="navigate(\'login\')" style="color:var(--red);font-weight:700;cursor:pointer">ovde da se prijaviš →</a>';
         } else {
           document.getElementById('verify-icon').textContent = '❌';
           document.getElementById('verify-title').textContent = 'Greška';

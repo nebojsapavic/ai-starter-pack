@@ -34,6 +34,7 @@ function navigate(page, params = {}) {
   else if (page === 'profile') renderProfile(app);
   else if (page === 'forgot-password') renderForgotPassword(app);
   else if (page === 'verify') renderVerifyEmail(app, params);
+  else if (page === 'contact') renderContact(app);
   else if (page === 'reset-password') renderResetPassword(app, params);
   else if (page === 'register') renderRegister(app);
   else render404(app);
@@ -1796,9 +1797,170 @@ function renderVerifyEmail(app, params = {}) {
   </div>`;
 }
 
+
+// ============================================================
+// COOKIE CONSENT
+// ============================================================
+function initCookieConsent() {
+  if (localStorage.getItem('cookieConsent')) return;
+  const banner = document.createElement('div');
+  banner.id = 'cookie-banner';
+  banner.innerHTML = `
+    <div class="cookie-inner">
+      <div class="cookie-text">
+        <span class="cookie-icon">🍪</span>
+        <div>
+          <strong>Koristimo kolačiće</strong>
+          <p>Koristimo kolačiće za poboljšanje korisničkog iskustva i analitiku. Vaši podaci su zaštićeni u skladu sa <a onclick="navigate('privacy')" style="color:var(--red);cursor:pointer">Politikom privatnosti</a>.</p>
+        </div>
+      </div>
+      <div class="cookie-actions">
+        <button class="cookie-btn-decline" onclick="declineCookies()">Odbij neobavezne</button>
+        <button class="cookie-btn-accept" onclick="acceptCookies()">Prihvati sve</button>
+      </div>
+    </div>`;
+  document.body.appendChild(banner);
+  setTimeout(() => banner.classList.add('show'), 500);
+}
+
+function acceptCookies() {
+  localStorage.setItem('cookieConsent', 'accepted');
+  hideCookieBanner();
+}
+
+function declineCookies() {
+  localStorage.setItem('cookieConsent', 'declined');
+  hideCookieBanner();
+}
+
+function hideCookieBanner() {
+  const banner = document.getElementById('cookie-banner');
+  if (banner) { banner.classList.remove('show'); setTimeout(() => banner.remove(), 400); }
+}
+
+// ============================================================
+// CONTACT PAGE
+// ============================================================
+function renderContact(app) {
+  app.innerHTML = `
+  <div class="page">
+    <section class="page-hero" style="background:linear-gradient(180deg,#fff,var(--bg2));border-bottom:1px solid var(--border);padding:80px 0 60px">
+      <div class="container">
+        <div class="section-label">Kontakt</div>
+        <h1 class="page-h1">Pišite nam</h1>
+        <p class="page-sub">Imate pitanje, sugestiju ili želite da implementirate kurs u svojoj školi? Tu smo!</p>
+      </div>
+    </section>
+
+    <section style="padding:80px 0 120px">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-form-wrap">
+            <div class="contact-form-title">Pošalji poruku</div>
+            <div class="f-error" id="contact-err"></div>
+            <div class="f-success" id="contact-ok" style="display:none;padding:16px;background:rgba(22,163,74,.06);border:1px solid rgba(22,163,74,.2);border-radius:10px;color:#16a34a;font-size:14px;margin-bottom:16px"></div>
+            <div class="f-row">
+              <div class="f-group"><label class="f-label">Ime</label><input type="text" class="f-input" id="c-name" placeholder="Vaše ime"></div>
+              <div class="f-group"><label class="f-label">Email</label><input type="email" class="f-input" id="c-email" placeholder="vas@email.com"></div>
+            </div>
+            <div class="f-group"><label class="f-label">Tema</label>
+              <select class="f-input" id="c-topic">
+                <option value="">Izaberite temu...</option>
+                <option value="Pitanje o kursu">Pitanje o kursu</option>
+                <option value="Tehnički problem">Tehnički problem</option>
+                <option value="Implementacija u školi/firmi">Implementacija u školi/firmi</option>
+                <option value="Partnerstvo">Partnerstvo</option>
+                <option value="Ostalo">Ostalo</option>
+              </select>
+            </div>
+            <div class="f-group"><label class="f-label">Poruka</label><textarea class="f-input" id="c-message" rows="5" placeholder="Vaša poruka..." style="resize:vertical"></textarea></div>
+            <button class="btn btn-red btn-wide" style="padding:14px" onclick="sendContact()">Pošalji poruku →</button>
+          </div>
+
+          <div class="contact-info">
+            <div class="contact-info-title">Kontakt informacije</div>
+            <div class="contact-info-items">
+              <div class="ci-item">
+                <div class="ci-icon">✉️</div>
+                <div>
+                  <div class="ci-label">Email</div>
+                  <a href="mailto:upis@its.edu.rs" class="ci-value">upis@its.edu.rs</a>
+                </div>
+              </div>
+              <div class="ci-item">
+                <div class="ci-icon">📞</div>
+                <div>
+                  <div class="ci-label">Telefon</div>
+                  <a href="tel:+381114011216" class="ci-value">+381 (0)11/40-11-216</a><br>
+                  <a href="tel:+381114011217" class="ci-value">+381 (0)11/40-11-217</a>
+                </div>
+              </div>
+              <div class="ci-item">
+                <div class="ci-icon">📱</div>
+                <div>
+                  <div class="ci-label">Viber / WhatsApp</div>
+                  <a href="tel:+381652015880" class="ci-value">+381 (0)65/20-15-880</a>
+                </div>
+              </div>
+              <div class="ci-item">
+                <div class="ci-icon">📍</div>
+                <div>
+                  <div class="ci-label">Adresa</div>
+                  <span class="ci-value">Savski nasip 7<br>Novi Beograd</span>
+                </div>
+              </div>
+              <div class="ci-item">
+                <div class="ci-icon">🕐</div>
+                <div>
+                  <div class="ci-label">Radno vreme</div>
+                  <span class="ci-value">Pon–Pet: 09:00–17:00</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-partners">
+              <div class="ci-label" style="margin-bottom:14px">Realizatori kursa</div>
+              <a href="https://www.its.edu.rs" target="_blank" class="contact-partner-link">🎓 www.its.edu.rs</a>
+              <a href="https://www.iths.edu.rs" target="_blank" class="contact-partner-link">🏫 www.iths.edu.rs</a>
+              <a href="https://ai.org.rs" target="_blank" class="contact-partner-link">🤖 ai.org.rs</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>`;
+}
+
+async function sendContact() {
+  const name = document.getElementById('c-name')?.value.trim();
+  const email = document.getElementById('c-email')?.value.trim();
+  const topic = document.getElementById('c-topic')?.value;
+  const message = document.getElementById('c-message')?.value.trim();
+  const err = document.getElementById('contact-err');
+  const ok = document.getElementById('contact-ok');
+  if (!name || !email || !topic || !message) { showErr(err, 'Sva polja su obavezna.'); return; }
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, topic, message })
+    });
+    const data = await res.json();
+    if (!res.ok) { showErr(err, data.error); return; }
+    err.classList.remove('show');
+    ok.textContent = '✓ Poruka je poslata! Odgovorićemo vam u najkraćem roku.';
+    ok.style.display = 'block';
+    document.getElementById('c-name').value = '';
+    document.getElementById('c-email').value = '';
+    document.getElementById('c-topic').value = '';
+    document.getElementById('c-message').value = '';
+  } catch(e) { showErr(err, 'Greška na serveru. Pokušajte ponovo.'); }
+}
+
 // INIT
 updateNav();
 showHamburger();
+initCookieConsent();
 // Check for tokens in URL
 const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
 const hashPath = window.location.hash.split('?')[0].replace('#', '');

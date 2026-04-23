@@ -1460,3 +1460,18 @@ nav.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.08)}
   85% { width: 90%; }
   100% { width: 100%; }
 }
+
+/* ── HOME CONTACT SECTION ── */
+.home-contact-section { padding: 100px 0; background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.home-contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: start; }
+.home-contact-left .section-sub { margin-bottom: 32px; }
+.home-contact-info { display: flex; flex-direction: column; gap: 14px; }
+.hci-item { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--text2); }
+.hci-item span:first-child { font-size: 20px; flex-shrink: 0; }
+.hci-item a { color: var(--text2); text-decoration: none; transition: color .15s; }
+.hci-item a:hover { color: var(--red); }
+.home-contact-right { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 36px; box-shadow: var(--shadow); }
+.hc-success { display: none; padding: 14px 18px; background: rgba(22,163,74,.06); border: 1px solid rgba(22,163,74,.2); border-radius: 10px; color: var(--green); font-size: 14px; margin-bottom: 16px; }
+
+@media (max-width: 1024px) { .home-contact-grid { grid-template-columns: 1fr; gap: 48px; } }
+@media (max-width: 768px) { .home-contact-section { padding: 64px 0; } .home-contact-right { padding: 24px 20px; } }

@@ -300,6 +300,44 @@ function renderHome(app) {
       </div>
     </section>
 
+    <section class="home-contact-section reveal">
+      <div class="container">
+        <div class="home-contact-grid">
+          <div class="home-contact-left">
+            <div class="section-label">Kontakt</div>
+            <h2 class="section-title">Imate pitanje?<br>Pišite nam.</h2>
+            <p class="section-sub">Imate pitanje o kursu, sertifikatu ili implementaciji u školi? Tu smo!</p>
+            <div class="home-contact-info">
+              <div class="hci-item"><span>✉️</span><a href="mailto:upis@its.edu.rs">upis@its.edu.rs</a></div>
+              <div class="hci-item"><span>📞</span><a href="tel:+381114011216">+381 (0)11/40-11-216</a></div>
+              <div class="hci-item"><span>📱</span><a href="tel:+381652015880">Viber/WhatsApp: +381 (0)65/20-15-880</a></div>
+              <div class="hci-item"><span>📍</span><span>Savski nasip 7, Novi Beograd</span></div>
+            </div>
+          </div>
+          <div class="home-contact-right">
+            <div class="f-error" id="hc-err"></div>
+            <div class="hc-success" id="hc-ok"></div>
+            <div class="f-row">
+              <div class="f-group"><label class="f-label">Ime i prezime</label><input type="text" class="f-input" id="hc-name" placeholder="Vaše ime"></div>
+              <div class="f-group"><label class="f-label">Email adresa</label><input type="email" class="f-input" id="hc-email" placeholder="vas@email.com"></div>
+            </div>
+            <div class="f-group"><label class="f-label">Tema</label>
+              <select class="f-input" id="hc-topic">
+                <option value="">Izaberite temu...</option>
+                <option>Pitanje o kursu</option>
+                <option>Tehnički problem</option>
+                <option>Implementacija u školi/firmi</option>
+                <option>Partnerstvo</option>
+                <option>Ostalo</option>
+              </select>
+            </div>
+            <div class="f-group"><label class="f-label">Poruka</label><textarea class="f-input" id="hc-message" rows="4" placeholder="Vaša poruka..." style="resize:vertical"></textarea></div>
+            <button class="btn btn-red btn-wide" style="padding:14px" onclick="sendHomeContact()">Pošalji poruku →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="slogan-section">
       <div class="slogan-bg"></div>
       <div class="slogan-glow"></div>
@@ -1955,6 +1993,32 @@ async function sendContact() {
     document.getElementById('c-topic').value = '';
     document.getElementById('c-message').value = '';
   } catch(e) { showErr(err, 'Greška na serveru. Pokušajte ponovo.'); }
+}
+
+async function sendHomeContact() {
+  const name = document.getElementById('hc-name')?.value.trim();
+  const email = document.getElementById('hc-email')?.value.trim();
+  const topic = document.getElementById('hc-topic')?.value;
+  const message = document.getElementById('hc-message')?.value.trim();
+  const err = document.getElementById('hc-err');
+  const ok = document.getElementById('hc-ok');
+  if (!name || !email || !topic || !message) { showErr(err, 'Sva polja su obavezna.'); return; }
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, topic, message })
+    });
+    const data = await res.json();
+    if (!res.ok) { showErr(err, data.error); return; }
+    err.classList.remove('show');
+    ok.textContent = '✓ Poruka je poslata! Odgovorićemo vam uskoro.';
+    ok.style.display = 'block';
+    document.getElementById('hc-name').value = '';
+    document.getElementById('hc-email').value = '';
+    document.getElementById('hc-topic').value = '';
+    document.getElementById('hc-message').value = '';
+    setTimeout(() => ok.style.display = 'none', 5000);
+  } catch(e) { showErr(err, 'Greška. Pokušajte ponovo.'); }
 }
 
 // INIT

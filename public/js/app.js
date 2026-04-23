@@ -1961,6 +1961,14 @@ async function sendContact() {
 updateNav();
 showHamburger();
 initCookieConsent();
+
+// Hide loader
+function hideLoader() {
+  const loader = document.getElementById('page-loader');
+  if (loader) {
+    setTimeout(() => loader.classList.add('hidden'), 400);
+  }
+}
 // Check for tokens in URL
 const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
 const hashPath = window.location.hash.split('?')[0].replace('#', '');

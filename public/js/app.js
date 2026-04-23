@@ -1114,7 +1114,7 @@ function renderLogin(app) {
         <div class="auth-field-group">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <label class="auth-label">Lozinka</label>
-            <a href="#" style="font-size:12px;color:var(--red);font-weight:600;text-decoration:none">Zaboravio/la?</a>
+            <a onclick="navigate('forgot-password')" style="font-size:12px;color:var(--red);font-weight:600;text-decoration:none;cursor:pointer">Zaboravio/la?</a>
           </div>
           <div class="auth-input-wrap">
             <span class="auth-input-icon">🔒</span>

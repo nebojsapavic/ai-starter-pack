@@ -144,9 +144,6 @@ function renderHome(app) {
           <div class="hero-stat"><div class="hs-val">100%</div><div class="hs-label">Besplatno</div></div>
         </div>
       </div>
-      <div class="scroll-hint">
-        <span>Skroluj</span>
-        <div class="scroll-arrow"></div>
       </div>
     </section>
 

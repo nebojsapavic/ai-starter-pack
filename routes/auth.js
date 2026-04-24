@@ -54,7 +54,7 @@ router.post('/login', async (req, res) => {
     if (!user) return res.status(401).json({ error: 'Pogrešan email ili lozinka.' });
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ error: 'Pogrešan email ili lozinka.' });
-    // verification temporarily disabled
+    if (!user.isVerified) return res.status(403).json({ error: "Molimo potvrdite email adresu pre prijave. Proveri inbox." });
     await User.findByIdAndUpdate(user._id, { lastActiveAt: new Date() });
     const token = jwt.sign({ id: user._id, email: user.email }, SECRET, { expiresIn: '30d' });
     res.json({ token, user: { id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email } });

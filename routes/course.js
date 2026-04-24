@@ -2,20 +2,20 @@ const router = require('express').Router();
 const auth = require('../server/middleware');
 const { User, Progress, QuizResult } = require('../server/db');
 const { sendQuizResultEmail, sendCertificateEmail } = require('../server/email');
-const data = require('../public/js/data');
+const { questions } = require('../server/questions');
 
 const TOTAL_MODULES = 7;
 const LESSONS_PER_MODULE = 3;
 const PASS_THRESHOLD = 0.4;
 
 const MODULE_NAMES = {
-  1: 'Šta je veštačka inteligencija?',
-  2: 'Kako AI rešava probleme?',
-  3: 'Uvod u mašinsko učenje',
-  4: 'Neuronske mreže – digitalni mozak',
-  5: 'AI u učenju, poslu i svakodnevici',
-  6: 'Odgovorno korišćenje AI',
-  7: 'AI i društvo – uticaji i budućnost',
+  1: 'Sta je vestacka inteligencija?',
+  2: 'Kako AI resava probleme?',
+  3: 'Uvod u masinsko ucenje',
+  4: 'Neuronske mreze',
+  5: 'AI u ucenju i poslu',
+  6: 'Odgovorno koriscenje AI',
+  7: 'AI i drustvo',
 };
 
 // Get full progress
@@ -30,7 +30,7 @@ router.get('/progress', auth, async (req, res) => {
       moduleProgress[m] = { moduleId: m, lessons: {}, quizAttempts: 0, quizScore: null, quizPassed: false, completed: false };
       for (let l = 1; l <= LESSONS_PER_MODULE; l++) {
         const rec = progress.find(p => p.moduleId === m && p.lessonId === l);
-        moduleProgress[m].lessons[l] = { completed: !!rec, completedAt: rec?.completedAt || null };
+        moduleProgress[m].lessons[l] = { completed: !!rec, completedAt: rec ? rec.completedAt : null };
       }
       const quizRecs = quizResults.filter(q => q.moduleId === m);
       moduleProgress[m].quizAttempts = quizRecs.length;
@@ -39,18 +39,18 @@ router.get('/progress', auth, async (req, res) => {
         moduleProgress[m].quizScore = best.score;
         moduleProgress[m].quizPassed = best.score >= PASS_THRESHOLD;
       }
-      const allLessons = Object.values(moduleProgress[m].lessons).every(l => l.completed);
+      const allLessons = Object.values(moduleProgress[m].lessons).every(function(l) { return l.completed; });
       moduleProgress[m].completed = allLessons && moduleProgress[m].quizPassed;
     }
 
-    const completedModules = Object.values(moduleProgress).filter(m => m.completed).length;
+    const completedModules = Object.values(moduleProgress).filter(function(m) { return m.completed; }).length;
     res.json({
       moduleProgress,
       completedModules,
       totalModules: TOTAL_MODULES,
       certificateEarned: completedModules === TOTAL_MODULES,
     });
-  } catch(e) { console.error(e); res.status(500).json({ error: 'Greška na serveru.' }); }
+  } catch(e) { console.error(e); res.status(500).json({ error: 'Greska na serveru.' }); }
 });
 
 // Mark lesson complete
@@ -58,13 +58,13 @@ router.post('/lesson/complete', auth, async (req, res) => {
   try {
     const { moduleId, lessonId } = req.body;
     const userId = req.user.id;
-    const existing = await Progress.findOne({ userId, moduleId, lessonId });
+    const existing = await Progress.findOne({ userId, moduleId: parseInt(moduleId), lessonId: parseInt(lessonId) });
     if (!existing) {
-      await Progress.create({ userId, moduleId, lessonId, completedAt: new Date() });
+      await Progress.create({ userId, moduleId: parseInt(moduleId), lessonId: parseInt(lessonId), completedAt: new Date() });
     }
     await User.findByIdAndUpdate(userId, { lastActiveAt: new Date() });
     res.json({ ok: true });
-  } catch(e) { res.status(500).json({ error: 'Greška na serveru.' }); }
+  } catch(e) { console.error(e); res.status(500).json({ error: 'Greska na serveru.' }); }
 });
 
 // Submit quiz
@@ -72,32 +72,33 @@ router.post('/quiz/submit', auth, async (req, res) => {
   try {
     const { moduleId, answers } = req.body;
     const userId = req.user.id;
+    const mid = parseInt(moduleId);
 
-    const module = data.modules.find(m => m.id === moduleId);
-    if (!module) return res.status(404).json({ error: 'Modul nije pronađen.' });
+    const moduleQuestions = questions[mid];
+    if (!moduleQuestions) return res.status(404).json({ error: 'Modul nije pronadjen.' });
 
     let correct = 0;
-    const results = module.questions.map((q, i) => {
+    const results = moduleQuestions.map(function(q, i) {
       const isCorrect = answers[i] === q.correct;
       if (isCorrect) correct++;
-      return { question: q.question, userAnswer: answers[i], correctAnswer: q.correct, isCorrect, explanation: q.explanation };
+      return { question: q.question, userAnswer: answers[i], correctAnswer: q.correct, isCorrect: isCorrect, explanation: q.explanation };
     });
 
-    const score = correct / module.questions.length;
+    const score = correct / moduleQuestions.length;
     const passed = score >= PASS_THRESHOLD;
 
-    await QuizResult.create({ userId, moduleId, score, correct, total: module.questions.length, passed });
+    await QuizResult.create({ userId, moduleId: mid, score, correct, total: moduleQuestions.length, passed });
     await User.findByIdAndUpdate(userId, { lastActiveAt: new Date() });
 
     // Send quiz result email
     try {
       const user = await User.findById(userId);
       if (user) {
-        sendQuizResultEmail(user.firstName, user.email, moduleId, MODULE_NAMES[moduleId], score, passed, correct, module.questions.length);
+        sendQuizResultEmail(user.firstName, user.email, mid, MODULE_NAMES[mid], score, passed, correct, moduleQuestions.length);
       }
-    } catch(e) { console.error('Quiz email error:', e.message); }
+    } catch(emailErr) { console.error('Quiz email error:', emailErr.message); }
 
-    // Check if all modules completed
+    // Check if all modules completed - send certificate
     if (passed) {
       try {
         let completedCount = 0;
@@ -110,11 +111,11 @@ router.post('/quiz/submit', auth, async (req, res) => {
           const user = await User.findById(userId);
           if (user) sendCertificateEmail(user.firstName, user.lastName, user.email);
         }
-      } catch(e) { console.error('Cert email error:', e.message); }
+      } catch(certErr) { console.error('Cert error:', certErr.message); }
     }
 
-    res.json({ score, correct, total: module.questions.length, passed, results });
-  } catch(e) { console.error(e); res.status(500).json({ error: 'Greška na serveru.' }); }
+    res.json({ score, correct, total: moduleQuestions.length, passed, results });
+  } catch(e) { console.error(e); res.status(500).json({ error: 'Greska na serveru.' }); }
 });
 
 // Get certificate
@@ -134,7 +135,7 @@ router.get('/certificate', auth, async (req, res) => {
       totalModules: TOTAL_MODULES,
       user: { firstName: user.firstName, lastName: user.lastName, email: user.email },
     });
-  } catch(e) { res.status(500).json({ error: 'Greška na serveru.' }); }
+  } catch(e) { res.status(500).json({ error: 'Greska na serveru.' }); }
 });
 
 module.exports = router;

@@ -428,3 +428,5 @@ const MODULES = [
     ]
   },
 ];
+
+if (typeof module !== 'undefined') module.exports = { modules };

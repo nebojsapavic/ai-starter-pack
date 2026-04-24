@@ -77,11 +77,16 @@ router.post('/quiz/submit', auth, async (req, res) => {
     const moduleQuestions = questions[mid];
     if (!moduleQuestions) return res.status(404).json({ error: 'Modul nije pronadjen.' });
 
+    // Normalize answers - support both [0,1,2] and [{questionId:0, answer:1}]
+    const normalizedAnswers = Array.isArray(answers) && answers.length > 0 && typeof answers[0] === 'object'
+      ? answers.map(function(a) { return a.answer; })
+      : answers;
+
     let correct = 0;
     const results = moduleQuestions.map(function(q, i) {
-      const isCorrect = answers[i] === q.correct;
+      const isCorrect = normalizedAnswers[i] === q.correct;
       if (isCorrect) correct++;
-      return { question: q.question, userAnswer: answers[i], correctAnswer: q.correct, isCorrect: isCorrect, explanation: q.explanation };
+      return { question: q.question, userAnswer: normalizedAnswers[i], correctAnswer: q.correct, isCorrect: isCorrect, explanation: q.explanation };
     });
 
     const score = correct / moduleQuestions.length;

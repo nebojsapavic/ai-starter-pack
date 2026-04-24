@@ -1,226 +1,226 @@
 const questions = {
   1: [
     {
-      question: "Šta je veštačka inteligencija?",
-      options: ["Vrsta robota koji hoda", "Sposobnost mašine da uči i rešava probleme", "Brži internet", "Novi programski jezik"],
+      question: "Koja od sledećih je primer uske (slabe) AI?",
+      options: ["AI koja razume sve ljudske emocije", "Preporuke na Spotify", "Superinteligencija iz filma", "AI koja rešava sve zadatke kao čovek"],
       correct: 1,
-      explanation: "AI je grana računarstva koja se bavi razvojem sistema sposobnih da obavljaju zadatke koji zahtevaju ljudsku inteligenciju."
+      explanation: "Uska AI obavlja jedan konkretan zadatak. Preporuke na Spotify su klasičan primer uske AI."
     },
     {
-      question: "Koja godina se smatra početkom AI kao naučne oblasti?",
-      options: ["1936", "1956", "1969", "1984"],
+      question: "Šta je 'model' u kontekstu AI?",
+      options: ["3D model za štampu", "'Mozak' AI sistema koji uči iz podataka", "Fizički robot", "Programski jezik"],
       correct: 1,
-      explanation: "Na Dartmouth konferenciji 1956. godine, John McCarthy je skovao termin 'veštačka inteligencija'."
+      explanation: "Model je 'mozak' AI sistema – matematička struktura koja je naučila obrasce iz trening podataka."
     },
     {
-      question: "Šta je Turingov test?",
-      options: ["Test brzine procesora", "Test da li mašina može da se ponaša nerazlučivo od čoveka", "Test programerskog znanja", "Test sigurnosti sistema"],
-      correct: 1,
-      explanation: "Alan Turing predložio je 1950. test kojim se proverava može li mašina pokazati inteligentno ponašanje ekvivalentno čovekovom."
-    },
-    {
-      question: "Koja od sledećih aplikacija NIJE primer AI?",
-      options: ["Prepoznavanje govora", "Preporuka filmova na Netflixu", "Kalkulator koji sabira brojeve", "Detekcija prevara u banci"],
+      question: "Koji od sledećih primera NIJE primena AI u svakodnevnom životu?",
+      options: ["Google Maps koji predviđa gužve", "TikTok preporuke videa", "Lampica koja svetli kada pritisneš dugme", "Face ID na iPhoneu"],
       correct: 2,
-      explanation: "Kalkulator izvršava unapred definisane operacije bez učenja — to nije AI. Ostale tri aplikacije koriste AI algoritme."
+      explanation: "Lampica koja svetli na pritisak dugmeta je jednostavna električna kola – ne koristi AI. Ostali primeri koriste AI algoritme."
     },
     {
-      question: "Šta znači skraćenica AI?",
-      options: ["Automated Internet", "Advanced Interface", "Artificial Intelligence", "Applied Innovation"],
-      correct: 2,
-      explanation: "AI = Artificial Intelligence = Veštačka inteligencija — sposobnost mašine da simulira aspekte ljudske inteligencije."
+      question: "Šta su 'trening podaci' u AI?",
+      options: ["Podaci o fizičkom treningu", "Primeri koje dajemo AI da uči iz njih", "Rezultati testova", "Softverski kod"],
+      correct: 1,
+      explanation: "Trening podaci su primeri iz kojih AI uči – npr. milioni slika mačaka i pasa za učenje prepoznavanja."
+    },
+    {
+      question: "Šta je 'opšta (jaka) AI'?",
+      options: ["AI koja brže procesira podatke", "AI koja razume i rešava širi spektar zadataka kao čovek – i još ne postoji", "AI koja koristi više podataka", "AI koja ima internet konekciju"],
+      correct: 1,
+      explanation: "Opšta AI bi mogla da obavlja bilo koji intelektualni zadatak kao čovek. Za razliku od uske AI, ona još uvek ne postoji."
     }
   ],
   2: [
     {
-      question: "Šta je algoritam?",
-      options: ["Vrsta baze podataka", "Precizno definisan niz koraka za rešavanje problema", "Programski jezik", "Vrsta procesora"],
+      question: "Šta je 'heuristika' u kontekstu AI pretrage?",
+      options: ["Vrsta greške u kodu", "Pravilo koje pomaže AI da brže proceni i odabere bolju opciju", "Matematička formula za tačne rezultate", "Vrsta baze podataka"],
       correct: 1,
-      explanation: "Algoritam je skup jasnih, izvršivih instrukcija koje vode ka rešenju problema."
+      explanation: "Heuristike su praktična pravila koja pomažu AI da brže pronađe dovoljno dobro rešenje, npr. 'idi ka tački koja je fizički najbliža cilju'."
     },
     {
-      question: "Koji pristup AI sistema se zasniva na sistemu 'ako-onda' pravila?",
-      options: ["Mašinsko učenje", "Ekspertni sistemi zasnovani na pravilima", "Neuronske mreže", "Duboko učenje"],
+      question: "Šta je 'minimax' algoritam?",
+      options: ["Algoritam za kompresiju podataka", "Algoritam za igre koji bira potez koji minimizuje maksimalnu štetu", "Metoda za sortiranje podataka", "Tehnika za ubrzanje interneta"],
       correct: 1,
-      explanation: "Ekspertni sistemi koriste bazu znanja i pravila zaključivanja u obliku 'ako uslov, onda akcija'."
+      explanation: "Minimax algoritam se koristi u igrama – AI pretpostavlja da protivnik igra savršeno i bira potez koji minimizuje njen maksimalni mogući gubitak."
     },
     {
-      question: "Šta je pretraga u prostoru stanja?",
-      options: ["Pretraga interneta", "Sistematično istraživanje mogućih rešenja problema", "Pretraga baze podataka", "Pretraga fajlova"],
+      question: "Koja su tri elementa koje AI agent mora znati da bi rešio problem?",
+      options: ["Boju, veličinu i oblik", "Početno stanje, ciljno stanje i dozvoljene akcije", "Brzinu, memoriju i procesor", "Jezik, bazu podataka i interfejs"],
       correct: 1,
-      explanation: "Pretraga prostora stanja je osnovna tehnika u AI kojom sistem istražuje moguće akcije i stanja da bi pronašao cilj."
+      explanation: "AI agent mora znati gde se nalazi (početno stanje), gde treba da stigne (ciljno stanje) i šta sme da uradi (akcije)."
     },
     {
-      question: "Kako Deep Blue (IBM) pobedio Kasparova 1997?",
-      options: ["Kopiranjem njegovih poteza", "Slučajnim odabirom poteza", "Analizom miliona pozicija po sekundi", "Učenjem od prethodnih šampiona"],
-      correct: 2,
-      explanation: "Deep Blue je mogao da analizira 200 miliona pozicija u sekundi koristeći minimax algoritam sa alfa-beta odsecanjem."
+      question: "Koje godine je Deep Blue pobedio svetskog šampiona u šahu Garija Kasparova?",
+      options: ["1985", "1997", "2005", "2011"],
+      correct: 1,
+      explanation: "1997. godine IBM-ov Deep Blue pobedio je Garija Kasparova – to je bio istorijski prvi put da je mašina nadigrala svetskog šampiona u šahu."
     },
     {
-      question: "Šta je heuristika u AI?",
-      options: ["Vrsta greške u kodu", "Praktično pravilo koje ubrzava pronalaženje rešenja", "Matematička formula", "Vrsta baze podataka"],
+      question: "Šta je 'reinforcement learning'?",
+      options: ["Učenje iz označenih podataka", "Učenje kroz nagradu i kaznu iz sopstvenog iskustva", "Kopiranje tuđih rešenja", "Učenje bez ikakvih podataka"],
       correct: 1,
-      explanation: "Heuristika su prečice i praktična pravila koja pomažu u pronalaženju dovoljno dobrog rešenja kada je optimalno rešenje skupo."
+      explanation: "U reinforcement learning-u, AI dobija 'nagradu' za dobre poteze i 'kaznu' za loše – i tako uči optimalnu strategiju kroz iskustvo."
     }
   ],
   3: [
     {
-      question: "Šta je osnovna ideja mašinskog učenja?",
-      options: ["Ručno programirati svako pravilo", "Sistemi koji uče iz podataka bez eksplicitnog programiranja", "Brže izvršavanje koda", "Bolje grafičko korisničko sučelje"],
+      question: "U nadgledanom učenju, AI dobija:",
+      options: ["Samo ulazne podatke bez objašnjenja", "Ulazne podatke i tačne oznake (labele) za svaki primer", "Samo ciljni rezultat bez primera", "Nasumične podatke"],
       correct: 1,
-      explanation: "ML omogućava računarima da uče iz iskustva i poboljšavaju performanse bez eksplicitnog programiranja."
+      explanation: "Nadgledano učenje koristi označene podatke – AI uči da poveže ulaze sa tačnim oznakama, npr. sliku mačke sa oznakom 'mačka'."
     },
     {
-      question: "Koji tip mašinskog učenja koristi označene podatke?",
-      options: ["Nenadgledano učenje", "Reinforcement learning", "Nadgledano učenje", "Transfer learning"],
+      question: "Gmail spam filter je primer kog tipa mašinskog učenja?",
+      options: ["Nenadgledano učenje", "Reinforcement learning", "Nadgledano učenje – klasifikacija", "Duboko učenje bez podataka"],
       correct: 2,
-      explanation: "Nadgledano učenje (supervised learning) koristi skup podataka gde svaki primer ima oznaku (label) koja govori modelu šta je tačan odgovor."
+      explanation: "Gmail spam filter je primer nadgledanog učenja (klasifikacija) – naučen je na milionima označenih mejlova (spam/nije spam)."
     },
     {
-      question: "Šta je klasifikacija u ML?",
-      options: ["Razvrstavanje podataka u unapred definisane kategorije", "Predviđanje kontinualne vrednosti", "Grupisanje sličnih podataka", "Smanjenje dimenzionalnosti"],
-      correct: 0,
-      explanation: "Klasifikacija je zadatak dodeljivanja ulaznih podataka jednoj od unapred definisanih kategorija, npr. spam/nije spam."
-    },
-    {
-      question: "Šta je overfitting?",
-      options: ["Model je previše jednostavan", "Model previše dobro pamti trening podatke i loše generalizuje", "Premalo podataka za treniranje", "Greška u algoritmu"],
+      question: "Šta je 'overfitting' u mašinskom učenju?",
+      options: ["Model je premali za podatke", "Model previše upamti trening podatke i loše radi na novim podacima", "Model uči prebrzo", "Model koristi previše memorije"],
       correct: 1,
-      explanation: "Overfitting nastaje kada model uči specifičnosti trening skupa umesto opštih obrazaca, pa loše radi na novim podacima."
+      explanation: "Overfitting nastaje kada model uči specifičnosti trening skupa umesto opštih obrazaca – kao student koji pamti odgovore napamet ali ne razume gradivo."
     },
     {
-      question: "Čemu služi test skup podataka (test set)?",
-      options: ["Za treniranje modela", "Za podešavanje hiperparametara", "Za procenu performansi modela na neviđenim podacima", "Za vizualizaciju podataka"],
-      correct: 2,
-      explanation: "Test skup se koristi isključivo za finalnu procenu modela i simulira kako će model raditi u stvarnosti."
+      question: "Šta je razlika između klasifikacije i regresije?",
+      options: ["Nema razlike", "Klasifikacija razvrstava u kategorije, regresija predviđa numeričke vrednosti", "Regresija je tačnija od klasifikacije", "Klasifikacija koristi više podataka"],
+      correct: 1,
+      explanation: "Klasifikacija odgovara 'kojoj kategoriji ovo pripada?' (spam/nije spam), dok regresija odgovara 'koja vrednost?' (koliko košta kuća)."
+    },
+    {
+      question: "Kolaborativno filtriranje na Netflixu znači:",
+      options: ["Netflix filtrira neprikladne sadržaje", "Preporuka zasnovana na sličnosti sa ponašanjem drugih korisnika", "AI bira filmove nasumično", "Netflix blokira određene korisnike"],
+      correct: 1,
+      explanation: "Kolaborativno filtriranje preporučuje sadržaj na osnovu ponašanja sličnih korisnika – 'korisnici koji su gledali X, gledali su i Y'."
     }
   ],
   4: [
     {
-      question: "Čime su inspirirane neuronske mreže?",
-      options: ["Električnim kolima", "Strukturom i funkcionisanjem biološkog mozga", "Internet mrežama", "Matematičkim matricama"],
+      question: "Šta određuje 'težina' (weight) u neuronskoj mreži?",
+      options: ["Fizičku veličinu mreže", "Jačinu veze između neurona", "Brzinu procesiranja", "Količinu podataka"],
       correct: 1,
-      explanation: "Veštačke neuronske mreže su inspirisane biološkim neuronima i sinapsama u ljudskom mozgu."
+      explanation: "Težine su brojevi koji određuju koliko je jaka veza između neurona – tokom treniranja, mreža podešava težine da smanji grešku."
     },
     {
-      question: "Šta je uloga aktivacijske funkcije u neuronskoj mreži?",
-      options: ["Ubrzava treniranje", "Uvodi nelinearnost, omogućavajući mreži da uči kompleksne obrasce", "Smanjuje veličinu mreže", "Čuva podatke"],
+      question: "Zašto se zove 'duboko' učenje?",
+      options: ["Jer duboko razume podatke", "Jer ima mnogo slojeva u neuronskoj mreži", "Jer koristi duboke baze podataka", "Jer traje dugo"],
       correct: 1,
-      explanation: "Bez aktivacijskih funkcija, neuronska mreža bi bila samo linearna transformacija. Aktivacijske funkcije omogućavaju učenje nelinearnih obrazaca."
+      explanation: "Duboko učenje se zove tako jer koristi neuronske mreže sa mnogo skrivenih slojeva – svaki sloj uči složenije karakteristike podataka."
     },
     {
-      question: "Šta označava 'duboko' u dubokom učenju (deep learning)?",
-      options: ["Duboko razumevanje podataka", "Mnoštvo slojeva u neuronskoj mreži", "Veliku količinu podataka", "Dugo vreme treniranja"],
+      question: "Šta je 'backpropagation'?",
+      options: ["Čuvanje backup kopije mreže", "Algoritam koji propagira grešku unazad kroz mrežu i ažurira težine", "Povratak na prethodnu verziju modela", "Smanjivanje veličine mreže"],
       correct: 1,
-      explanation: "Duboko učenje se odnosi na neuronske mreže sa mnogo skrivenih slojeva, što im omogućava učenje hijerarhijskih reprezentacija."
+      explanation: "Backpropagation izračunava kako svaka težina doprinosi grešci i ažurira je – analogno tome kako učimo iz grešaka."
     },
     {
-      question: "Koji tip neuronske mreže se najčešće koristi za obradu slika?",
-      options: ["Rekurentne neuronske mreže (RNN)", "Konvolucione neuronske mreže (CNN)", "Generativne suparničke mreže (GAN)", "Autoenkoderi"],
+      question: "CNN (Konvoluciona neuronska mreža) je specijalizovana za:",
+      options: ["Obradu teksta i jezika", "Obradu slika i video sadržaja", "Igranje igrica", "Analizu finansijskih podataka"],
       correct: 1,
-      explanation: "CNN mreže su specijalizovane za obradu mrežnih podataka poput slika, koristeći konvolucione filtere za detekciju karakteristika."
+      explanation: "CNN mreže su dizajnirane za obradu mrežnih podataka poput slika – koriste konvolucione filtere da detektuju ivice, oblike i objekte."
     },
     {
-      question: "Šta je backpropagation?",
-      options: ["Tehnika za povećanje brzine mreže", "Algoritam koji propagira grešku unazad kroz mrežu da bi ažurirao težine", "Metoda za smanjenje mreže", "Tehnika za backup podataka"],
+      question: "Transformer arhitektura je osnova:",
+      options: ["Robotike", "Svih modernih jezičkih modela kao što su ChatGPT i Claude", "Autonomnih vozila", "Medicinskih uređaja"],
       correct: 1,
-      explanation: "Backpropagation izračunava gradijent funkcije gubitka i ažurira težine mreže koristeći gradient descent."
+      explanation: "Transformer sa mehanizmom 'pažnje' (attention) je arhitektura koja stoji iza ChatGPT, Claude, Gemini i svih modernih jezičkih modela."
     }
   ],
   5: [
     {
-      question: "Koji od sledećih alata koristi AI za generisanje teksta?",
-      options: ["Microsoft Word", "Adobe Photoshop", "ChatGPT", "Google Chrome"],
+      question: "Šta znači 'hallucination' u kontekstu jezičkih modela?",
+      options: ["AI ima vizuelne efekte", "AI daje uverljiv ali netačan odgovor", "AI prestaje da radi", "AI govori previše brzo"],
+      correct: 1,
+      explanation: "Halucinacija je kada AI daje uverljivo formulisan ali faktički netačan odgovor – zato je važno uvek proveravati informacije koje AI daje."
+    },
+    {
+      question: "Šta je 'prompt engineering'?",
+      options: ["Programiranje AI sistema", "Veština pisanja efikasnih upita za AI modele", "Dizajn interfejsa", "Testiranje softvera"],
+      correct: 1,
+      explanation: "Prompt engineering je veština formulisanja upita AI modelima na način koji daje najkorisnije i najpreciznije odgovore."
+    },
+    {
+      question: "Koji AI alat je posebno koristan za sumarizaciju dugih dokumenata?",
+      options: ["Photoshop", "Google Maps", "Claude ili ChatGPT", "Microsoft Excel"],
       correct: 2,
-      explanation: "ChatGPT je large language model (LLM) koji koristi AI za razumevanje i generisanje prirodnog jezika."
+      explanation: "Jezički modeli poput Claude i ChatGPT su odlični za sumarizaciju – mogu da sumiraju 20-straničan izveštaj za nekoliko sekundi."
     },
     {
-      question: "Šta je preporučiteljski sistem (recommender system)?",
-      options: ["Sistem koji preporučuje lekove", "AI sistem koji predlaže sadržaj na osnovu korisničkih preferencija", "Sistem za pretragu interneta", "Antivirus program"],
+      question: "Šta je 'adaptivno učenje' u obrazovanju?",
+      options: ["Učenje u različitim vremenskim zonama", "Sistem koji prilagođava sadržaj prema napretku i greškama učenika", "Učenje na različitim uređajima", "Brzo učenje novih tema"],
       correct: 1,
-      explanation: "Netflix, Spotify i Amazon koriste preporučiteljske sisteme da personalizuju iskustvo svakog korisnika."
+      explanation: "Adaptivno učenje personalizuje obrazovni sadržaj – npr. Duolingo prati gde grešiš i prilagođava lekcije tvom tempu."
     },
     {
-      question: "Koja je primena AI u zdravstvu?",
-      options: ["Samo administracija", "Dijagnoza bolesti, analiza medicinskih slika i razvoj lekova", "Samo istraživanje", "Samo naručivanje lekova"],
+      question: "Koji je ključni nedostatak AI asistenata koji treba imati na umu?",
+      options: ["Previše su skupi", "Mogu halucinirati i imati zastarele informacije", "Rade samo na engleskom", "Rade samo na kompjuterima"],
       correct: 1,
-      explanation: "AI pomaže radiolozima u analizi snimaka, predviđa rizik od bolesti i ubrzava razvoj novih lekova."
-    },
-    {
-      question: "Šta je autonomno vozilo?",
-      options: ["Vozilo na električni pogon", "Vozilo koje se kreće bez vozača koristeći AI", "Vozilo sa automatskim menjačem", "Vozilo na solarni pogon"],
-      correct: 1,
-      explanation: "Autonomna vozila koriste kombinaciju senzora, računarskog vida i AI da bi se bezbedno kretala bez vozača."
-    },
-    {
-      question: "Kako AI pomaže u personalizovanom obrazovanju?",
-      options: ["Zamenjuje nastavnike potpuno", "Prilagođava tempo, sadržaj i stil učenja svakom učeniku", "Samo ocenjuje testove", "Pravi raspored"],
-      correct: 1,
-      explanation: "Adaptivni sistemi učenja prate napredak, identifikuju slabe tačke i prilagođavaju materijal potrebama svakog učenika."
+      explanation: "AI asistenti mogu halucinirati (izmišljati činjenice), imati zastarele podatke i ne razumeti tvoj lični kontekst – uvek proveravaj važne informacije."
     }
   ],
   6: [
     {
-      question: "Šta je algoritmijska pristrasnost (bias)?",
-      options: ["Greška u programskom kodu", "Sistematska nepravičnost u AI odlukama zbog pristrasnih podataka", "Spor algoritam", "Previše podataka"],
+      question: "Zašto je Amazon ugasio svoj AI alat za regrutaciju?",
+      options: ["Bio je preskup", "Diskriminisao je žene jer je naučen na istorijskim podacima gde su muškarci dominirali u IT", "Bio je presporao", "Nije radio na mobilnim uređajima"],
       correct: 1,
-      explanation: "Bias nastaje kada trening podaci odražavaju istorijske nejednakosti, što AI sistem usvaja i reprodukuje u odlukama."
+      explanation: "Amazon-ov AI za regrutaciju naučio je da preferira muške kandidate jer su trening podaci odražavali istorijsku dominaciju muškaraca u IT industriji."
+    },
+    {
+      question: "Šta je 'deepfake'?",
+      options: ["Vrsta hakerskog napada na server", "AI-generisani lažni video ili audio koji imitira stvarnu osobu", "Lažni profil na društvenim mrežama", "Virus koji briše podatke"],
+      correct: 1,
+      explanation: "Deepfake koristi generativne neuronske mreže da kreira hyperrealistične lažne snimke osoba – može biti zloupotrebljeno za dezinformacije."
+    },
+    {
+      question: "Šta reguliše GDPR?",
+      options: ["Cene digitalnih proizvoda", "Kako se lični podaci korisnika EU prikupljaju i koriste", "Brzinu interneta", "Poreze na tehnološke kompanije"],
+      correct: 1,
+      explanation: "GDPR (General Data Protection Regulation) je evropski zakon koji štiti lične podatke građana EU i daje im kontrolu nad tim kako se koriste."
+    },
+    {
+      question: "Ko je odgovoran kada AI sistem donese pogrešnu medicinsku dijagnozu?",
+      options: ["Samo programer koji ga je napravio", "Niko – AI nije odgovoran", "Odgovornost je kolektivna: programeri, bolnica koja ga koristi i lekari koji se oslanjaju na njega", "Samo pacijent koji je dao pristanak"],
+      correct: 2,
+      explanation: "Odgovornost za AI greške je kolektivna – programeri, institucije koje implementiraju AI i korisnici koji ga nekritički primenjuju dele odgovornost."
     },
     {
       question: "Koji je princip 'objašnjive AI' (Explainable AI)?",
-      options: ["AI koja piše objašnjenja tekstova", "AI čije odluke mogu da se razumeju i objasne ljudima", "AI sa glasovnim objašnjenjima", "AI za edukaciju"],
+      options: ["AI koja piše duga objašnjenja", "AI čije odluke mogu da se razumeju i objasne ljudima", "AI koja govori naglas", "AI sa video uputstvima"],
       correct: 1,
-      explanation: "XAI (Explainable AI) osigurava da korisnici mogu razumeti zašto je AI donela određenu odluku, što je ključno za poverenje."
-    },
-    {
-      question: "Šta reguliše EU AI Act (Zakon o AI)?",
-      options: ["Cene AI proizvoda", "Razvoj i primenu AI sistema prema nivoima rizika", "Obrazovanje o AI", "Poreze na AI kompanije"],
-      correct: 1,
-      explanation: "EU AI Act klasifikuje AI sisteme prema riziku (minimalni, ograničeni, visoki, neprihvatljivi) i propisuje obaveze za svaki nivo."
-    },
-    {
-      question: "Šta je deepfake?",
-      options: ["Vrsta hakerskog napada", "Lažni video/audio sadržaj generisan AI tehnologijom", "Deepweb stranica", "AI igra"],
-      correct: 1,
-      explanation: "Deepfake koristi generativne neuronske mreže da kreira uvjerljive lažne snimke koji mogu biti zloupotrebljeni za dezinformacije."
-    },
-    {
-      question: "Koji je etički problem u AI prepoznavanju lica?",
-      options: ["Previše je skupo", "Može biti pristrasno i kršiti privatnost", "Previše je sporo", "Ne radi na telefonima"],
-      correct: 1,
-      explanation: "Sistemi za prepoznavanje lica pokazuju veću stopu grešaka za određene demografske grupe i mogu biti zloupotrebljeni za masovni nadzor."
+      explanation: "Objašnjiva AI (XAI) osigurava da korisnici mogu razumeti zašto je AI donela određenu odluku – ključno za poverenje i odgovornost."
     }
   ],
   7: [
     {
-      question: "Koji poslovi su NAJOTPORNIJI na automatizaciju veštačkom inteligencijom?",
-      options: ["Unos podataka", "Poslovi koji zahtevaju empatiju, kreativnost i socijalne veštine", "Vožnja kamiona", "Pregled dokumenata"],
+      question: "Koje veštine AI teže imitira i koje ostaju vredne?",
+      options: ["Unos podataka i izrada izveštaja", "Kritičko mišljenje, empatija i etičko rasuđivanje", "Prevođenje i analiza teksta", "Pretraživanje i organizacija informacija"],
       correct: 1,
-      explanation: "Poslovi koji kombinuju empatiju, kompleksno rasuđivanje i socijalne veštine teže se automatizuju jer AI još uvek ne može da ih replicira."
+      explanation: "AI teško imitira empatiju, kreativnost, etičko rasuđivanje i interpersonalne veštine – ove kompetencije ostaju izrazito vredne u budućnosti rada."
     },
     {
-      question: "Šta je 'AI zima' (AI winter)?",
-      options: ["AI koja simulira zimu", "Period smanjenog interesovanja i finansiranja AI istraživanja", "Energetska efikasnost AI", "AI u meteorologiji"],
+      question: "Šta je 'AGI' (Artificial General Intelligence)?",
+      options: ["Napredni gaming AI", "Hipotetička AI sposobna za bilo koji intelektualni zadatak kao čovek", "Vladina AI agencija", "AI za grafički dizajn"],
       correct: 1,
-      explanation: "Bilo je više 'AI zima' u istoriji — periodi kada su visoka očekivanja bila razbijen, što je dovelo do drastičnog smanjenja ulaganja."
+      explanation: "AGI bi bila AI koja može obavljati bilo koji intelektualni zadatak kao čovek ili bolje – za razliku od današnje uske AI specijalizovane za jedan zadatak."
     },
     {
-      question: "Šta je AGI (Artificial General Intelligence)?",
-      options: ["Napredni gaming AI", "Hipotetička AI koja može obavljati bilo koji intelektualni zadatak kao čovek", "Vladina AI agencija", "AI za grafički dizajn"],
+      question: "Šta je EU AI Act i kada je stupio na snagu?",
+      options: ["Američki zakon o AI iz 2020.", "Evropski zakon koji klasifikuje AI po riziku, stupio na snagu 2024.", "Međunarodni sporazum o zabrani AI", "EU poreski zakon za AI kompanije"],
       correct: 1,
-      explanation: "AGI je AI sposobna za generalnu inteligenciju — za razliku od narrow AI koja je specijalizovana za jedan zadatak."
+      explanation: "EU AI Act stupio je na snagu 2024. godine i klasifikuje AI sisteme prema riziku (neprihvatljiv, visok, ograničen, minimalan) sa odgovarajućim obavezama."
     },
     {
-      question: "Koliko električne energije troši obuka velikih AI modela?",
-      options: ["Zanemarljivo malo", "Ekvivalentno stotinama ili hiljadama domaćinstava godišnje", "Isto kao mobilni telefon", "Manje od laptopa"],
+      question: "Šta je AlphaFold i zašto je značajan?",
+      options: ["AI za igranje šaha", "DeepMind AI koji je rešio problem savijanja proteina koji je mučio naučnike 50 godina", "AI za generisanje muzike", "AI asistent za programiranje"],
       correct: 1,
-      explanation: "Obuka modela poput GPT-4 troši ogromne količine energije i ima značajan ugljični otisak, što je rastući ekološki problem."
+      explanation: "AlphaFold je DeepMind-ov AI koji je rešio problem predviđanja 3D strukture proteina – revolucionarna dostignuće za biologiju i razvoj lekova."
     },
     {
-      question: "Šta je najvažniji uslov za odgovoran razvoj AI?",
-      options: ["Što brži razvoj bez ograničenja", "Međunarodna saradnja, regulativa i etički principi", "Tajnost istraživanja", "Monopol jedne kompanije"],
+      question: "Ko su tri ključna globalna igrača u AI trci?",
+      options: ["Rusija, Brazil i Indija", "SAD, Kina i EU", "Japan, Koreja i Australija", "UK, Kanada i Izrael"],
       correct: 1,
-      explanation: "Odgovoran AI razvoj zahteva transparentnost, međunarodne standarde, etički nadzor i inkluzivno učešće svih zainteresovanih strana."
+      explanation: "SAD dominira fundamentalnim istraživanjem (OpenAI, Google), Kina ima ogromne podatke i državnu podršku, a EU vodi u regulaciji (EU AI Act)."
     }
   ]
 };

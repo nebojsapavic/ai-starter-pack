@@ -2,6 +2,7 @@ const router = require('express').Router();
 const auth = require('../server/middleware');
 const { User, Progress, QuizResult } = require('../server/db');
 const { sendQuizResultEmail, sendCertificateEmail } = require('../server/email');
+const data = require('../public/js/data');
 
 const TOTAL_MODULES = 7;
 const LESSONS_PER_MODULE = 3;
@@ -72,27 +73,20 @@ router.post('/quiz/submit', auth, async (req, res) => {
     const { moduleId, answers } = req.body;
     const userId = req.user.id;
 
-    // Load questions from data.js safely
-    let moduleData;
-    try {
-      const rawData = require('fs').readFileSync(require('path').join(__dirname, '../public/js/data.js'), 'utf8');
-      const match = rawData.match(/const modules\s*=\s*(\[[\s\S]*?\]);?\s*(?:if\s*\(typeof|$)/);
-      if (!match) return res.status(500).json({ error: 'Nije moguće učitati podatke.' });
-      moduleData = eval('(' + match[1] + ')').find(m => m.id === moduleId);
-    } catch(e) { return res.status(500).json({ error: 'Greška pri učitavanju podataka.' }); }
-    if (!moduleData) return res.status(404).json({ error: 'Modul nije pronađen.' });
+    const module = data.modules.find(m => m.id === moduleId);
+    if (!module) return res.status(404).json({ error: 'Modul nije pronađen.' });
 
     let correct = 0;
-    const results = moduleData.questions.map((q, i) => {
+    const results = module.questions.map((q, i) => {
       const isCorrect = answers[i] === q.correct;
       if (isCorrect) correct++;
       return { question: q.question, userAnswer: answers[i], correctAnswer: q.correct, isCorrect, explanation: q.explanation };
     });
 
-    const score = correct / moduleData.questions.length;
+    const score = correct / module.questions.length;
     const passed = score >= PASS_THRESHOLD;
 
-    await QuizResult.create({ userId, moduleId, score, correct, total: moduleData.questions.length, passed });
+    await QuizResult.create({ userId, moduleId, score, correct, total: module.questions.length, passed });
     await User.findByIdAndUpdate(userId, { lastActiveAt: new Date() });
 
     // Send quiz result email
@@ -119,7 +113,7 @@ router.post('/quiz/submit', auth, async (req, res) => {
       } catch(e) { console.error('Cert email error:', e.message); }
     }
 
-    res.json({ score, correct, total: moduleData.questions.length, passed, results });
+    res.json({ score, correct, total: module.questions.length, passed, results });
   } catch(e) { console.error(e); res.status(500).json({ error: 'Greška na serveru.' }); }
 });
 

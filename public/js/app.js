@@ -947,32 +947,72 @@ async function renderCertificate(app) {
   }
   const date = new Date(certData.completedAt).toLocaleDateString('sr-RS', { day:'numeric', month:'long', year:'numeric' });
   app.innerHTML = `
-  <div class="page cert-page">
-    <div class="section-label" style="justify-content:center;margin-bottom:12px">Sertifikat</div>
-    <h2 class="section-title" style="text-align:center;margin-bottom:40px">Tvoj AI Starter Pack sertifikat</h2>
-    <div class="cert-preview" id="cert-preview">
-      <div class="cert-inner">
-        <div class="cert-logo-wrap">${logoSVG(28)}</div>
-        <div class="cert-word">Sertifikat o završetku</div>
-        <div class="cert-title-big">AI Starter Pack</div>
-        <div class="cert-to">Dodeljuje se</div>
-        <div class="cert-name">${certData.firstName} ${certData.lastName}</div>
-        <div class="cert-body">za uspešno završen kurs <strong>AI Starter Pack</strong> – besplatni online kurs o veštačkoj inteligenciji kroz 7 modula.</div>
-        <div class="cert-badges-wrap">
-          <div class="cert-badge-big"><span>${certData.ects}</span> ECTS Boda</div>
-          <div class="cert-badge-big"><span>${certData.discount}€</span> Popust ITS/ITHS</div>
-        </div>
-        <div class="cert-date">${date}</div>
-        <div class="cert-partners">
-          <div><div class="cert-partner-name">ITS</div><div style="font-size:9px;color:var(--text4)">www.its.edu.rs</div></div>
-          <div style="text-align:center"><div style="font-size:24px">🤖</div><div class="cert-partner-name" style="font-size:9px">AI Savez Srbije</div></div>
-          <div style="text-align:right"><div class="cert-partner-name">ITHS</div><div style="font-size:9px;color:var(--text4)">www.iths.edu.rs</div></div>
-        </div>
+  <div class="page" style="background:var(--bg2);min-height:100vh;padding:60px 20px">
+    <div style="max-width:720px;margin:0 auto">
+      <div style="text-align:center;margin-bottom:40px">
+        <div class="section-label" style="justify-content:center;margin-bottom:12px">Čestitamo! 🎉</div>
+        <h2 class="section-title" style="text-align:center">Tvoj AI Starter Pack sertifikat</h2>
       </div>
-    </div>
-    <div class="cert-actions">
-      <button class="btn btn-red" onclick="window.print()">🖨️ Štampaj / PDF</button>
-      <button class="btn btn-outline" onclick="navigate('dashboard')">← Nazad na kurs</button>
+
+      <!-- CERTIFICATE -->
+      <div id="cert-preview" style="background:#fff;border-radius:24px;box-shadow:0 24px 80px rgba(0,0,0,.12);overflow:hidden;position:relative">
+        <!-- Top dark header -->
+        <div style="background:#06080f;padding:36px 48px;display:flex;align-items:center;justify-content:space-between">
+          <div>${logoSVG(32)}</div>
+          <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4)">Sertifikat o završetku</div>
+        </div>
+
+        <!-- Main content -->
+        <div style="padding:56px 48px;text-align:center">
+          <div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--text4);margin-bottom:20px">Dodeljuje se</div>
+          <div style="font-size:clamp(32px,6vw,52px);font-weight:800;letter-spacing:-.04em;color:var(--red);line-height:1.1;margin-bottom:20px">${certData.firstName} ${certData.lastName}</div>
+          <div style="font-size:15px;color:var(--text3);max-width:420px;margin:0 auto 40px;line-height:1.7">
+            za uspešno završen kurs <strong style="color:var(--text)">AI Starter Pack</strong> – besplatni online kurs o veštačkoj inteligenciji kroz 7 modula.
+          </div>
+
+          <!-- Badges -->
+          <div style="display:flex;gap:14px;justify-content:center;margin-bottom:48px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:10px;padding:14px 28px;background:#06080f;border-radius:980px;color:#fff">
+              <span style="font-size:22px;font-weight:800;letter-spacing:-.03em">2</span>
+              <span style="font-size:13px;font-weight:600">ECTS Boda</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:14px 28px;background:var(--red);border-radius:980px;color:#fff">
+              <span style="font-size:22px;font-weight:800;letter-spacing:-.03em">100€</span>
+              <span style="font-size:13px;font-weight:600">Popust ITS/ITHS</span>
+            </div>
+          </div>
+
+          <div style="font-size:13px;color:var(--text4);margin-bottom:48px">${date}</div>
+
+          <!-- Divider -->
+          <div style="height:1px;background:var(--border);margin:0 -48px 32px"></div>
+
+          <!-- Partners -->
+          <div style="display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap">
+            <div style="text-align:center">
+              <div style="font-size:16px;font-weight:800;letter-spacing:-.02em;color:var(--text)">ITS</div>
+              <div style="font-size:11px;color:var(--text4)">www.its.edu.rs</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:28px;margin-bottom:2px">🤖</div>
+              <div style="font-size:11px;color:var(--text4)">AI Savez Srbije</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:16px;font-weight:800;letter-spacing:-.02em;color:var(--text)">ITHS</div>
+              <div style="font-size:11px;color:var(--text4)">www.iths.edu.rs</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Red bottom accent -->
+        <div style="height:6px;background:linear-gradient(90deg,var(--red),#ff6b6b)"></div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display:flex;gap:14px;justify-content:center;margin-top:32px;flex-wrap:wrap">
+        <button class="btn btn-red" style="padding:14px 32px;font-size:15px" onclick="window.print()">🖨️ Štampaj / Sačuvaj PDF</button>
+        <button class="btn btn-outline" style="padding:14px 32px;font-size:15px" onclick="navigate('dashboard')">← Nazad na kurs</button>
+      </div>
     </div>
   </div>`;
 }

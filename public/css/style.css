@@ -1480,32 +1480,34 @@ nav.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.08)}
 @media print {
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-  nav, #site-footer-static, .float-cta, #cookie-banner,
-  #page-loader, .cert-actions, [class*="toast"],
-  button, .page > div:not(#cert-print-wrap) { display: none !important; }
+  /* Hide everything except certificate */
+  nav, #site-footer-static, .float-cta, #cookie-banner, #page-loader { display: none !important; }
+  .cert-actions { display: none !important; }
 
   body { background: #fff !important; margin: 0 !important; padding: 0 !important; }
-  .page { padding: 0 !important; margin: 0 !important; background: #fff !important; }
 
+  /* Show only certificate wrapper */
   #cert-print-wrap {
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 0 !important;
     box-shadow: none !important;
     border-radius: 0 !important;
     page-break-inside: avoid;
+    border: none !important;
   }
 
-  .cert-print-header {
-    background: #06080f !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
+  /* Force background colors */
+  .cert-print-header { background: #06080f !important; }
+  .cert-print-header * { color: rgba(255,255,255,.5) !important; }
   .cert-print-red { color: #E8192C !important; }
-  .cert-print-badge-dark { background: #06080f !important; color: #fff !important; }
-  .cert-print-badge-red { background: #E8192C !important; color: #fff !important; }
-  .cert-print-accent { background: linear-gradient(90deg, #E8192C, #ff6b6b) !important; }
+  .cert-print-badge-dark { background: #06080f !important; }
+  .cert-print-badge-dark * { color: #fff !important; }
+  .cert-print-badge-red { background: #E8192C !important; }
+  .cert-print-badge-red * { color: #fff !important; }
+  .cert-print-accent { background: #E8192C !important; height: 8px !important; display: block !important; }
+
+  /* Hide page header/footer from browser */
+  @page { margin: 10mm; }
 }

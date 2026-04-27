@@ -2,19 +2,15 @@
 <html lang="sr">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png">
+<link rel="apple-touch-icon" href="/img/favicon-new.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Starter Pack</title>
 
 
 <link rel="stylesheet" href="/css/style.css">
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-M96QJDJS9E"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-M96QJDJS9E');
-</script>
 </head>
 <body>
 
@@ -59,7 +55,7 @@
     <button class="btn btn-red nav-auth-btn" onclick="navigate('register')">Registracija</button>
     <div class="nav-user" id="nav-user" style="display:none">
       <span id="nav-user-name"></span>
-      <button class="btn btn-surface btn-sm" onclick="navigate('profile')">👤 Profil</button><button class="btn btn-outline btn-sm" onclick="logout()">Odjava</button>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Odjava</button>
     </div>
     <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Meni">
       <span></span><span></span><span></span>

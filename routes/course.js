@@ -77,16 +77,11 @@ router.post('/quiz/submit', auth, async (req, res) => {
     const moduleQuestions = questions[mid];
     if (!moduleQuestions) return res.status(404).json({ error: 'Modul nije pronadjen.' });
 
-    // Normalize answers - support both [0,1,2] and [{questionId:0, answer:1}]
-    const normalizedAnswers = Array.isArray(answers) && answers.length > 0 && typeof answers[0] === 'object'
-      ? answers.map(function(a) { return a.answer; })
-      : answers;
-
     let correct = 0;
     const results = moduleQuestions.map(function(q, i) {
-      const isCorrect = normalizedAnswers[i] === q.correct;
+      const isCorrect = answers[i] === q.correct;
       if (isCorrect) correct++;
-      return { question: q.question, userAnswer: normalizedAnswers[i], correctAnswer: q.correct, isCorrect: isCorrect, explanation: q.explanation };
+      return { question: q.question, userAnswer: answers[i], correctAnswer: q.correct, isCorrect: isCorrect, explanation: q.explanation };
     });
 
     const score = correct / moduleQuestions.length;
@@ -128,17 +123,31 @@ router.get('/certificate', auth, async (req, res) => {
   try {
     const userId = req.user.id;
     let completedCount = 0;
+    let lastCompletedAt = null;
     for (let m = 1; m <= TOTAL_MODULES; m++) {
       const best = await QuizResult.findOne({ userId, moduleId: m, passed: true });
       const lessons = await Progress.find({ userId, moduleId: m });
-      if (best && lessons.length >= LESSONS_PER_MODULE) completedCount++;
+      if (best && lessons.length >= LESSONS_PER_MODULE) {
+        completedCount++;
+        if (best.submittedAt && (!lastCompletedAt || best.submittedAt > lastCompletedAt)) {
+          lastCompletedAt = best.submittedAt;
+        }
+      }
+    }
+    if (completedCount < TOTAL_MODULES) {
+      return res.status(403).json({ error: `Završi svih 7 modula da dobiješ sertifikat. Trenutno: ${completedCount}/7` });
     }
     const user = await User.findById(userId);
     res.json({
-      earned: completedCount === TOTAL_MODULES,
+      earned: true,
       completedModules: completedCount,
       totalModules: TOTAL_MODULES,
-      user: { firstName: user.firstName, lastName: user.lastName, email: user.email },
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      completedAt: lastCompletedAt || new Date(),
+      ects: 2,
+      discount: 100,
     });
   } catch(e) { res.status(500).json({ error: 'Greska na serveru.' }); }
 });

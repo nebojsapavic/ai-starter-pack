@@ -1475,3 +1475,37 @@ nav.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.08)}
 
 @media (max-width: 1024px) { .home-contact-grid { grid-template-columns: 1fr; gap: 48px; } }
 @media (max-width: 768px) { .home-contact-section { padding: 64px 0; } .home-contact-right { padding: 24px 20px; } }
+
+/* ── PRINT / PDF CERTIFICATE ── */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  nav, #site-footer-static, .float-cta, #cookie-banner,
+  #page-loader, .cert-actions, [class*="toast"],
+  button, .page > div:not(#cert-print-wrap) { display: none !important; }
+
+  body { background: #fff !important; margin: 0 !important; padding: 0 !important; }
+  .page { padding: 0 !important; margin: 0 !important; background: #fff !important; }
+
+  #cert-print-wrap {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    page-break-inside: avoid;
+  }
+
+  .cert-print-header {
+    background: #06080f !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .cert-print-red { color: #E8192C !important; }
+  .cert-print-badge-dark { background: #06080f !important; color: #fff !important; }
+  .cert-print-badge-red { background: #E8192C !important; color: #fff !important; }
+  .cert-print-accent { background: linear-gradient(90deg, #E8192C, #ff6b6b) !important; }
+}

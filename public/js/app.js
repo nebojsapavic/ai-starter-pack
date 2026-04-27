@@ -822,11 +822,16 @@ function renderQuizResults(app, { moduleId, result }) {
   const detailsHtml = result.results.map((r, i) => {
     const q = QUIZ_QUESTIONS[moduleId][i];
     const letters = ['A','B','C','D'];
+    const userAnswerText = (r.userAnswer !== undefined && r.userAnswer !== null && q) ? q.opts[r.userAnswer] : (r.userAnswerText || '–');
+    const correctAnswerText = (r.correctAnswer !== undefined && q) ? q.opts[r.correctAnswer] : (r.correctAnswerText || '–');
+    const userLetter = (r.userAnswer !== undefined && r.userAnswer !== null) ? letters[r.userAnswer] : '–';
+    const correctLetter = (r.correctAnswer !== undefined) ? letters[r.correctAnswer] : '–';
+    const isCorrect = r.isCorrect !== undefined ? r.isCorrect : r.correct;
     return `<div style="padding:16px 0;border-bottom:1px solid var(--border)">
-      <div style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--text)">${i+1}. ${q.q}</div>
-      <div style="font-size:13px;margin-bottom:4px;color:${r.correct ? '#16a34a' : 'var(--red)'}">${r.correct ? '✓' : '✗'} Tvoj odgovor: ${letters[r.userAnswer]} – ${q.opts[r.userAnswer]}</div>
-      ${!r.correct ? `<div style="font-size:13px;color:#16a34a">✓ Tačan: ${letters[r.correctAnswer]} – ${q.opts[r.correctAnswer]}</div>` : ''}
-      <div style="font-size:12px;color:var(--text4);margin-top:6px;padding:8px 12px;background:var(--bg2);border-radius:8px">${r.explanation}</div>
+      <div style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--text)">${i+1}. ${q ? q.q : r.question}</div>
+      <div style="font-size:13px;margin-bottom:4px;color:${isCorrect ? '#16a34a' : 'var(--red)'}">${isCorrect ? '✓' : '✗'} Tvoj odgovor: ${userLetter} – ${userAnswerText}</div>
+      ${!isCorrect ? `<div style="font-size:13px;color:#16a34a">✓ Tačan: ${correctLetter} – ${correctAnswerText}</div>` : ''}
+      <div style="font-size:12px;color:var(--text4);margin-top:6px;padding:8px 12px;background:var(--bg2);border-radius:8px">${r.explanation || (q ? q.exp : '')}</div>
     </div>`;
   }).join('');
 

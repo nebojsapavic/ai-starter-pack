@@ -809,7 +809,7 @@ function quizPrev() { if (quizState.currentQ > 0) { quizState.currentQ--; render
 async function submitQuiz() {
   const { moduleId, answers } = quizState;
   try {
-    const payload = answers.map((a, i) => ({ questionId: i, answer: a }));
+    const payload = answers;  // simple array of answer indices
     const result = await API.submitQuiz(moduleId, payload);
     await loadProgress();
     navigate('quiz-results', { moduleId, result });
@@ -819,19 +819,20 @@ async function submitQuiz() {
 function renderQuizResults(app, { moduleId, result }) {
   const m = MODULES.find(x => x.id === moduleId);
   const pct = Math.round(result.score * 100);
-  const detailsHtml = result.results.map((r, i) => {
+  const detailsHtml = quizState.answers.map((userAnswerIdx, i) => {
     const q = QUIZ_QUESTIONS[moduleId][i];
+    if (!q) return '';
     const letters = ['A','B','C','D'];
-    const userAnswerText = (r.userAnswer !== undefined && r.userAnswer !== null && q) ? q.opts[r.userAnswer] : (r.userAnswerText || '–');
-    const correctAnswerText = (r.correctAnswer !== undefined && q) ? q.opts[r.correctAnswer] : (r.correctAnswerText || '–');
-    const userLetter = (r.userAnswer !== undefined && r.userAnswer !== null) ? letters[r.userAnswer] : '–';
-    const correctLetter = (r.correctAnswer !== undefined) ? letters[r.correctAnswer] : '–';
-    const isCorrect = r.isCorrect !== undefined ? r.isCorrect : r.correct;
+    const isCorrect = userAnswerIdx === q.correct;
+    const userLetter = letters[userAnswerIdx] || '–';
+    const userText = q.opts[userAnswerIdx] || '–';
+    const correctLetter = letters[q.correct];
+    const correctText = q.opts[q.correct];
     return `<div style="padding:16px 0;border-bottom:1px solid var(--border)">
-      <div style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--text)">${i+1}. ${q ? q.q : r.question}</div>
-      <div style="font-size:13px;margin-bottom:4px;color:${isCorrect ? '#16a34a' : 'var(--red)'}">${isCorrect ? '✓' : '✗'} Tvoj odgovor: ${userLetter} – ${userAnswerText}</div>
-      ${!isCorrect ? `<div style="font-size:13px;color:#16a34a">✓ Tačan: ${correctLetter} – ${correctAnswerText}</div>` : ''}
-      <div style="font-size:12px;color:var(--text4);margin-top:6px;padding:8px 12px;background:var(--bg2);border-radius:8px">${r.explanation || (q ? q.exp : '')}</div>
+      <div style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--text)">${i+1}. ${q.q}</div>
+      <div style="font-size:13px;margin-bottom:4px;color:${isCorrect ? '#16a34a' : 'var(--red)'}">${isCorrect ? '✓' : '✗'} Tvoj odgovor: ${userLetter} – ${userText}</div>
+      ${!isCorrect ? `<div style="font-size:13px;color:#16a34a">✓ Tačan: ${correctLetter} – ${correctText}</div>` : ''}
+      <div style="font-size:12px;color:var(--text4);margin-top:6px;padding:8px 12px;background:var(--bg2);border-radius:8px">${q.exp}</div>
     </div>`;
   }).join('');
 

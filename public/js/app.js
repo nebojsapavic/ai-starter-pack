@@ -119,58 +119,41 @@ function renderHome(app) {
   app.innerHTML = `
   <div class="page">
 
-    <section class="hero">
-      <!-- LEFT SIDE -->
-      <div class="hero-left">
-        <div class="hero-inner">
-          <div class="hero-badge"><span class="hero-dot"></span>Besplatno &middot; Online &middot; Sertifikat</div>
-          <h1 class="hero-h1">Veštačka<br>inteligencija,<br><span>objašnjena<br>jednostavno.</span></h1>
-          <p class="hero-p">Besplatan kurs kroz 7 praktičnih modula – nauči kako AI funkcioniše i kako ti može pomoći u učenju, radu i svakodnevnom životu.</p>
-          <div class="hero-btns">
-            <button class="btn btn-red btn-lg" onclick="navigate('register')">Počni besplatno →</button>
-            <button class="btn btn-ghost btn-lg" onclick="navigate('modules')">Pogledaj module</button>
-          </div>
-          <div class="hero-trust">
-            <div class="trust-item"><span class="trust-check">✓</span> Bez kreditne kartice</div>
-            <div class="trust-item"><span class="trust-check">✓</span> 2 ECTS boda</div>
-            <div class="trust-item"><span class="trust-check">✓</span> Digitalni sertifikat</div>
-            <div class="trust-item"><span class="trust-check">✓</span> Svi uređaji</div>
-          </div>
-          <div class="hero-stats-row">
-            <div class="hero-stat"><div class="hs-val">7</div><div class="hs-label">Modula</div></div>
-            <div class="hero-stat-div"></div>
-            <div class="hero-stat"><div class="hs-val">21</div><div class="hs-label">Lekcija</div></div>
-            <div class="hero-stat-div"></div>
-            <div class="hero-stat"><div class="hs-val">35</div><div class="hs-label">Pitanja</div></div>
-            <div class="hero-stat-div"></div>
-            <div class="hero-stat"><div class="hs-val">100%</div><div class="hs-label">Besplatno</div></div>
-          </div>
-        </div>
-      </div>
-      <!-- RIGHT SIDE: image + floating cards -->
-      <div class="hero-right">
-        <div class="hero-right-img" id="hero-bg"></div>
-        <div class="hero-right-fade"></div>
-        <div class="hero-right-cards">
-          <div class="hero-floating-card">
-            <span class="hfc-icon">🧠</span>
-            <div class="hfc-text">Mašinsko učenje<div class="hfc-sub">Modul 3 · 3 lekcije</div></div>
-          </div>
-          <div class="hero-floating-card">
-            <span class="hfc-icon">🏆</span>
-            <div class="hfc-text">Sertifikat + 2 ECTS<div class="hfc-sub">Po završetku kursa</div></div>
-          </div>
-          <div class="hero-floating-card">
-            <span class="hfc-icon">⚡</span>
-            <div class="hfc-text">100% besplatno<div class="hfc-sub">Bez kreditne kartice</div></div>
-          </div>
-        </div>
-        <div class="hero-accent-line"></div>
-      </div>
-      <!-- Mobile fallback bg -->
-      <div class="hero-bg-img"></div>
+    <section class="hero" id="hero-section">
+      <canvas id="hero-canvas" style="position:absolute;inset:0;z-index:0;pointer-events:none"></canvas>
+      <div class="hero-bg-img" id="hero-bg"></div>
       <div class="hero-overlay"></div>
-      <div class="hero-grid-lines"></div>
+      <div class="hero-inner">
+        <div class="hero-badge" style="animation:fadeUp .6s .2s both">
+          <span class="hero-dot"></span>Besplatno &middot; Online &middot; Sertifikat
+        </div>
+        <h1 class="hero-h1" style="animation:fadeUp .7s .35s both">
+          Veštačka inteligencija,<br><span id="hero-typed"></span><span class="hero-cursor">|</span>
+        </h1>
+        <p class="hero-p" style="animation:fadeUp .6s .55s both">
+          Besplatan kurs kroz 7 praktičnih modula – nauči kako AI funkcioniše i kako ti može pomoći da učiš, radiš i misliš pametnije.
+        </p>
+        <div class="hero-btns" style="animation:fadeUp .6s .65s both">
+          <button class="btn btn-red btn-lg hero-cta-btn" onclick="navigate('register')">Počni besplatno →</button>
+          <button class="btn btn-ghost btn-lg" onclick="navigate('modules')">Pogledaj module</button>
+        </div>
+        <div class="hero-trust" style="animation:fadeUp .6s .75s both">
+          <div class="trust-item"><span class="trust-check">✓</span> Bez kreditne kartice</div>
+          <div class="trust-item"><span class="trust-check">✓</span> 2 ECTS boda</div>
+          <div class="trust-item"><span class="trust-check">✓</span> Digitalni sertifikat</div>
+          <div class="trust-item"><span class="trust-check">✓</span> Svi uređaji</div>
+        </div>
+        <div class="hero-stats-row" style="animation:fadeUp .6s .85s both">
+          <div class="hero-stat"><div class="hs-val" data-count="7">0</div><div class="hs-label">Modula</div></div>
+          <div class="hero-stat-div"></div>
+          <div class="hero-stat"><div class="hs-val" data-count="21">0</div><div class="hs-label">Lekcija</div></div>
+          <div class="hero-stat-div"></div>
+          <div class="hero-stat"><div class="hs-val" data-count="35">0</div><div class="hs-label">Pitanja</div></div>
+          <div class="hero-stat-div"></div>
+          <div class="hero-stat"><div class="hs-val">100%</div><div class="hs-label">Besplatno</div></div>
+        </div>
+      </div>
+      <div class="scroll-hint"><span>Skroluj</span><div class="scroll-arrow"></div></div>
     </section>
 
     <section class="modules-preview">
@@ -2291,3 +2274,134 @@ Sertifikat se dobija po završetku svih modula i polaganju kvizova. Kurs je potp
     input.focus();
   };
 })();
+
+// ============================================================
+// HERO ANIMATIONS — canvas particles, typewriter, counters
+// ============================================================
+function initHeroAnimations() {
+  // ── CANVAS PARTICLES ──
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], mouse = { x: -999, y: -999 };
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  canvas.parentElement.addEventListener('mousemove', e => {
+    const r = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+  });
+  canvas.parentElement.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
+
+  // Create particles
+  for (let i = 0; i < 90; i++) {
+    particles.push({
+      x: Math.random() * 1920,
+      y: Math.random() * 1080,
+      r: Math.random() * 1.8 + 0.4,
+      vx: (Math.random() - .5) * .35,
+      vy: (Math.random() - .5) * .35,
+      opacity: Math.random() * .5 + .15,
+      color: Math.random() > .85 ? `rgba(232,25,44,` : `rgba(255,255,255,`
+    });
+  }
+
+  function draw() {
+    if (!document.getElementById('hero-canvas')) return;
+    ctx.clearRect(0, 0, W, H);
+
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 130) {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(255,255,255,${.06 * (1 - dist/130)})`;
+          ctx.lineWidth = .5;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw & update particles
+    particles.forEach(p => {
+      // Mouse repulsion
+      const dx = p.x - mouse.x, dy = p.y - mouse.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 100) {
+        p.vx += dx / dist * .08;
+        p.vy += dy / dist * .08;
+      }
+      // Speed limit
+      const speed = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+      if (speed > 1.5) { p.vx *= .95; p.vy *= .95; }
+
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + p.opacity + ')';
+      ctx.fill();
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  // ── TYPEWRITER ──
+  const typed = document.getElementById('hero-typed');
+  const cursor = document.querySelector('.hero-cursor');
+  if (typed) {
+    const text = 'objašnjena jednostavno.';
+    typed.style.cssText = 'color:transparent;background:linear-gradient(135deg,#E8192C 0%,#ff6b6b 60%,#ff8c42 100%);-webkit-background-clip:text;background-clip:text;';
+    let i = 0;
+    setTimeout(() => {
+      const interval = setInterval(() => {
+        typed.textContent = text.slice(0, ++i);
+        if (i >= text.length) {
+          clearInterval(interval);
+          if (cursor) { cursor.style.animation = 'blink 1s infinite'; }
+        }
+      }, 55);
+    }, 900);
+  }
+
+  // ── COUNTER ANIMATION ──
+  setTimeout(() => {
+    document.querySelectorAll('.hs-val[data-count]').forEach(el => {
+      const target = parseInt(el.dataset.count);
+      let current = 0;
+      const step = Math.ceil(target / 30);
+      const interval = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = current;
+        if (current >= target) clearInterval(interval);
+      }, 40);
+    });
+  }, 1200);
+}
+
+// Hook into navigate
+const _origNavigate = navigate;
+window.navigate = function(page, params = {}) {
+  _origNavigate(page, params);
+  if (page === 'home') {
+    setTimeout(initHeroAnimations, 100);
+  }
+};
+// Also run on initial load
+setTimeout(() => {
+  if (document.getElementById('hero-canvas')) initHeroAnimations();
+}, 200);

@@ -1872,3 +1872,53 @@ nav {
   .partners-row{grid-template-columns:1fr}
 }
 
+
+/* ── HERO EXTRAS ── */
+.hero-cursor {
+  display: inline-block;
+  width: 3px;
+  background: #E8192C;
+  margin-left: 3px;
+  animation: blink 1s infinite;
+  vertical-align: baseline;
+  font-weight: 300;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.hero-cta-btn {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(232,25,44,.4), 0 4px 20px rgba(232,25,44,.25) !important;
+}
+.hero-cta-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -60%;
+  width: 40%; height: 200%;
+  background: rgba(255,255,255,.15);
+  transform: skewX(-20deg);
+  animation: btnShine 3s ease-in-out infinite 1.5s;
+}
+@keyframes btnShine {
+  0%   { left: -60%; }
+  100% { left: 130%; }
+}
+.hero-cta-btn:hover {
+  box-shadow: 0 0 70px rgba(232,25,44,.55), 0 8px 32px rgba(232,25,44,.35) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* Ghost button proper style */
+.hero-btns .btn-ghost {
+  border: 1.5px solid rgba(255,255,255,.18) !important;
+  border-radius: 980px !important;
+  color: rgba(255,255,255,.65) !important;
+  padding: 14px 28px !important;
+}
+.hero-btns .btn-ghost:hover {
+  border-color: rgba(255,255,255,.4) !important;
+  color: #fff !important;
+  background: rgba(255,255,255,.07) !important;
+  transform: translateY(-2px) !important;
+}
+

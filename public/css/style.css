@@ -2266,3 +2266,116 @@ nav {
   .hero-left { padding: 0 24px; }
 }
 
+
+/* ============================================================
+   PATCH v4 — dark nav, logo fix, hero vertikalno centriran
+   ============================================================ */
+
+/* NAV — tamna pozadina da logo bude vidljiv */
+nav {
+  background: rgba(6, 8, 15, 0.92) !important;
+  backdrop-filter: saturate(180%) blur(24px) !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+}
+.nav-links a {
+  color: rgba(255,255,255,.6) !important;
+}
+.nav-links a:hover {
+  color: #fff !important;
+  background: rgba(255,255,255,.07) !important;
+}
+.nav-links a.active {
+  color: #fff !important;
+}
+.nav-links a::after {
+  background: var(--red) !important;
+}
+.nav-user {
+  color: rgba(255,255,255,.8) !important;
+}
+#nav-user-name {
+  color: rgba(255,255,255,.8);
+  font-size: 14px;
+  font-weight: 500;
+}
+.btn-outline.nav-auth-btn {
+  border-color: rgba(255,255,255,.25) !important;
+  color: rgba(255,255,255,.8) !important;
+}
+.btn-outline.nav-auth-btn:hover {
+  border-color: rgba(255,255,255,.6) !important;
+  color: #fff !important;
+  background: rgba(255,255,255,.07) !important;
+}
+
+/* LOGO — uvek vidljiv, invertovan na tamnoj pozadini */
+.logo-img {
+  height: 30px !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+/* HERO — vertikalno centriran, padding od nava */
+.hero {
+  min-height: 100vh !important;
+  padding-top: 0 !important;
+}
+.hero-left {
+  padding: 0 80px !important;
+  justify-content: center !important;
+  min-height: 100vh !important;
+  padding-top: 64px !important;
+  padding-bottom: 40px !important;
+  box-sizing: border-box !important;
+}
+.hero-inner {
+  width: 100%;
+  max-width: 560px;
+}
+
+/* HERO h1 — malo veći, bolji line-height */
+.hero-h1 {
+  font-size: clamp(42px, 5vw, 68px) !important;
+  line-height: 1.0 !important;
+  letter-spacing: -.05em !important;
+  margin-bottom: 24px !important;
+}
+
+/* HERO p — ne prenagnutý */
+.hero-p {
+  font-size: 17px !important;
+  color: rgba(255,255,255,.55) !important;
+  line-height: 1.7 !important;
+  max-width: 440px !important;
+  margin-bottom: 36px !important;
+}
+
+/* HERO badge */
+.hero-badge {
+  margin-bottom: 32px !important;
+}
+
+/* HERO stats — lepši kontrast */
+.hero-stats-row {
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  margin-top: 48px !important;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .hero-left {
+    padding: 80px 28px 40px !important;
+    min-height: 100svh !important;
+    justify-content: flex-end !important;
+    padding-bottom: 60px !important;
+  }
+}
+@media (max-width: 768px) {
+  .hero-left {
+    padding: 80px 24px 48px !important;
+  }
+  .hero-h1 {
+    font-size: clamp(34px, 9vw, 48px) !important;
+  }
+}
+

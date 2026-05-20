@@ -1219,7 +1219,37 @@ async function doLogin() {
   const err = document.getElementById('login-err');
   if (!email || !pass) { showErr(err, 'Unesite email i lozinku.'); return; }
   try { await API.login(email, pass); updateNav(); showToast('Dobrodošao/la! 👋', 'success'); navigate('dashboard'); }
-  catch (e) { showErr(err, e.message); }
+  catch (e) {
+    if (e.message && e.message.includes('potvrdite email')) {
+      err.style.display = 'block';
+      err.innerHTML = `
+        <div style="margin-bottom:10px">${e.message}</div>
+        <button onclick="resendVerification('${email}')" class="btn btn-outline btn-sm" style="font-size:13px;width:100%;justify-content:center;margin-top:4px">
+          📧 Pošalji verifikacioni email ponovo
+        </button>`;
+    } else {
+      showErr(err, e.message);
+    }
+  }
+}
+
+async function resendVerification(email) {
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Šalje se...';
+  try {
+    await fetch('/api/auth/resend-verification', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    btn.textContent = '✓ Email je poslat! Proveri inbox.';
+    btn.style.color = 'var(--green)';
+    btn.style.borderColor = 'var(--green)';
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = '📧 Pokušaj ponovo';
+  }
 }
 
 function renderRegister(app) {

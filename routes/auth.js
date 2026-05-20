@@ -158,4 +158,25 @@ router.post('/reset-password', async (req, res) => {
   } catch(e) { res.status(500).json({ error: 'Greška na serveru.' }); }
 });
 
+// Resend verification email
+router.post('/resend-verification', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email je obavezan.' });
+    const user = await User.findOne({ email: email.toLowerCase() });
+    // Uvek vrati OK da ne otkrivamo da li postoji nalog
+    if (!user || user.isVerified) return res.json({ ok: true });
+    // Generiši novi token ako nema
+    const crypto = require('crypto');
+    const token = user.verificationToken || crypto.randomBytes(32).toString('hex');
+    await User.findByIdAndUpdate(user._id, { verificationToken: token });
+    const { sendVerificationEmail } = require('../server/email');
+    sendVerificationEmail(user.firstName, user.email, token);
+    res.json({ ok: true });
+  } catch(e) {
+    console.error(e);
+    res.status(500).json({ error: 'Greška na serveru.' });
+  }
+});
+
 module.exports = router;

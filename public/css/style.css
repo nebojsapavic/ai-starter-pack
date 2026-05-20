@@ -2170,3 +2170,99 @@ nav.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.08)}
   }
 }
 
+
+/* ============================================================
+   PATCH v3 — nav logo fix, hero centering, chatbot button
+   ============================================================ */
+
+/* NAV: logo uvek vidljiv, bolji razmak */
+nav {
+  padding: 0 40px;
+  justify-content: space-between;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.logo-img {
+  height: 32px;
+  width: auto;
+  display: block !important;
+  opacity: 1 !important;
+}
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.nav-right {
+  flex-shrink: 0;
+}
+
+/* HERO: vertikalno centrirano, ne previše gore */
+.hero-left {
+  padding: 0 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+}
+.hero-inner {
+  padding-top: 0;
+}
+
+/* HERO h1: malo manji da ne bude tako prepun */
+.hero-h1 {
+  font-size: clamp(36px, 4.5vw, 62px) !important;
+  line-height: 1.05 !important;
+  margin-bottom: 22px !important;
+}
+
+/* CHATBOT: lepše dugme, bez emoji robota */
+.chatbot-toggle {
+  width: 52px;
+  height: 52px;
+  font-size: 0 !important; /* sakrij emoji */
+  background: linear-gradient(135deg, #E8192C, #a00e1e) !important;
+  box-shadow: 0 4px 20px rgba(232,25,44,.45) !important;
+  position: relative;
+}
+.chatbot-toggle::before {
+  content: '';
+  display: block;
+  width: 22px;
+  height: 22px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* CHATBOT: spusti malo niže */
+#ai-chatbot {
+  bottom: 28px !important;
+  right: 28px !important;
+}
+
+/* FLOATING CARDS: malo bolji stil */
+.hero-floating-card {
+  background: rgba(10, 10, 20, 0.72) !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+.hfc-text {
+  color: rgba(255,255,255,.92) !important;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* NAV mobile */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { position: static; transform: none; }
+  .hero-left { padding: 0 24px; }
+}
+

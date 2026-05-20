@@ -117,37 +117,57 @@ function renderHome(app) {
   <div class="page">
 
     <section class="hero">
-      <div class="hero-bg-img" id="hero-bg"></div>
+      <!-- LEFT SIDE -->
+      <div class="hero-left">
+        <div class="hero-inner">
+          <div class="hero-badge"><span class="hero-dot"></span>Besplatno &middot; Online &middot; Sertifikat</div>
+          <h1 class="hero-h1">Veštačka<br>inteligencija,<br><span>objašnjena<br>jednostavno.</span></h1>
+          <p class="hero-p">Besplatan kurs kroz 7 praktičnih modula – nauči kako AI funkcioniše i kako ti može pomoći u učenju, radu i svakodnevnom životu.</p>
+          <div class="hero-btns">
+            <button class="btn btn-red btn-lg" onclick="navigate('register')">Počni besplatno →</button>
+            <button class="btn btn-ghost btn-lg" onclick="navigate('modules')">Pogledaj module</button>
+          </div>
+          <div class="hero-trust">
+            <div class="trust-item"><span class="trust-check">✓</span> Bez kreditne kartice</div>
+            <div class="trust-item"><span class="trust-check">✓</span> 2 ECTS boda</div>
+            <div class="trust-item"><span class="trust-check">✓</span> Digitalni sertifikat</div>
+            <div class="trust-item"><span class="trust-check">✓</span> Svi uređaji</div>
+          </div>
+          <div class="hero-stats-row">
+            <div class="hero-stat"><div class="hs-val">7</div><div class="hs-label">Modula</div></div>
+            <div class="hero-stat-div"></div>
+            <div class="hero-stat"><div class="hs-val">21</div><div class="hs-label">Lekcija</div></div>
+            <div class="hero-stat-div"></div>
+            <div class="hero-stat"><div class="hs-val">35</div><div class="hs-label">Pitanja</div></div>
+            <div class="hero-stat-div"></div>
+            <div class="hero-stat"><div class="hs-val">100%</div><div class="hs-label">Besplatno</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- RIGHT SIDE: image + floating cards -->
+      <div class="hero-right">
+        <div class="hero-right-img" id="hero-bg"></div>
+        <div class="hero-right-fade"></div>
+        <div class="hero-right-cards">
+          <div class="hero-floating-card">
+            <span class="hfc-icon">🧠</span>
+            <div class="hfc-text">Mašinsko učenje<div class="hfc-sub">Modul 3 · 3 lekcije</div></div>
+          </div>
+          <div class="hero-floating-card">
+            <span class="hfc-icon">🏆</span>
+            <div class="hfc-text">Sertifikat + 2 ECTS<div class="hfc-sub">Po završetku kursa</div></div>
+          </div>
+          <div class="hero-floating-card">
+            <span class="hfc-icon">⚡</span>
+            <div class="hfc-text">100% besplatno<div class="hfc-sub">Bez kreditne kartice</div></div>
+          </div>
+        </div>
+        <div class="hero-accent-line"></div>
+      </div>
+      <!-- Mobile fallback bg -->
+      <div class="hero-bg-img"></div>
       <div class="hero-overlay"></div>
       <div class="hero-grid-lines"></div>
-      <div class="hero-inner">
-        <div class="hero-badge"><span class="hero-dot"></span>Besplatno &middot; Online &middot; Sertifikat</div>
-        <h1 class="hero-h1">Veštačka inteligencija,<br><span>objašnjena jednostavno.</span></h1>
-        <p class="hero-p">Besplatan online kurs kroz 7 praktičnih modula – nauči kako AI funkcioniše, gde ga koristiš svakodnevno i kako ti može pomoći da učiš, radiš i misliš pametnije.</p>
-        <div class="hero-btns">
-          <button class="btn btn-red btn-lg" onclick="navigate('register')">Počni besplatno →</button>
-          <button class="btn btn-ghost btn-lg" onclick="navigate('about')">Saznaj više</button>
-        </div>
-        <div class="hero-trust">
-          <div class="trust-item"><span class="trust-check">✓</span> Bez kreditne kartice</div>
-          <div class="trust-item"><span class="trust-check">✓</span> 2 ECTS boda</div>
-          <div class="trust-item"><span class="trust-check">✓</span> Digitalni sertifikat</div>
-          <div class="trust-item"><span class="trust-check">✓</span> Dostupno na svim uređajima</div>
-        </div>
-        <div class="hero-stats-row">
-          <div class="hero-stat"><div class="hs-val" data-count="7">7</div><div class="hs-label">Modula</div></div>
-          <div class="hero-stat-div"></div>
-          <div class="hero-stat"><div class="hs-val" data-count="21">21</div><div class="hs-label">Lekcija</div></div>
-          <div class="hero-stat-div"></div>
-          <div class="hero-stat"><div class="hs-val" data-count="35">35</div><div class="hs-label">Pitanja</div></div>
-          <div class="hero-stat-div"></div>
-          <div class="hero-stat"><div class="hs-val">100%</div><div class="hs-label">Besplatno</div></div>
-        </div>
-      </div>
-      <div class="scroll-hint">
-        <span>Skroluj</span>
-        <div class="scroll-arrow"></div>
-      </div>
     </section>
 
     <section class="modules-preview">
@@ -907,7 +927,14 @@ async function renderDashboard(app) {
       <div class="container">
         <div class="dash-greeting">Zdravo, <span>${user.firstName}</span>! 👋</div>
         <div class="dash-meta">Nastavi tamo gde si stao/la · AI Starter Pack</div>
-        ${p.certificateEarned ? `<div style="margin-top:16px;padding:14px 20px;background:rgba(22,163,74,.07);border:1px solid rgba(22,163,74,.25);border-radius:10px;display:inline-block"><span style="color:#16a34a;font-weight:700">🎓 Čestitamo! Kurs je završen.</span><button class="btn btn-green btn-sm" style="margin-left:16px" onclick="navigate('certificate')">Preuzmi sertifikat</button></div>` : ''}
+        <div class="dash-overall-progress" style="margin-top:24px">
+          <div class="dop-label">
+            <span class="dop-text">Ukupan napredak</span>
+            <span class="dop-pct">${overallPct}%</span>
+          </div>
+          <div class="dop-bar-wrap"><div class="dop-bar" id="dop-bar" style="width:0%"></div></div>
+        </div>
+        ${p.certificateEarned ? `<div style="margin-top:16px;padding:14px 20px;background:rgba(22,163,74,.07);border:1px solid rgba(22,163,74,.25);border-radius:10px;display:inline-flex;align-items:center;gap:12px"><span style="color:#16a34a;font-weight:700">🎓 Čestitamo! Kurs je završen.</span><button class="btn btn-green btn-sm" onclick="navigate('certificate')">Preuzmi sertifikat</button></div>` : ''}
       </div>
     </div>
     <div class="dash-stats">
@@ -2089,3 +2116,145 @@ if (hashPath === 'reset-password' && hashParams.get('token')) {
 } else {
   navigate('home');
 }
+
+// ============================================================
+// DASHBOARD PROGRESS BAR ANIMATION
+// ============================================================
+const _origRenderDash = renderDashboard;
+// Patch: animate dop-bar after render
+const _dashObserver = new MutationObserver(() => {
+  const bar = document.getElementById('dop-bar');
+  if (bar && bar.style.width === '0%') {
+    const target = bar.parentElement.previousElementSibling?.querySelector('.dop-pct')?.textContent;
+    if (target) setTimeout(() => { bar.style.width = target; }, 100);
+  }
+});
+_dashObserver.observe(document.getElementById('app'), { childList: true, subtree: false });
+
+// ============================================================
+// AI CHATBOT
+// ============================================================
+(function initChatbot() {
+  const chatEl = document.createElement('div');
+  chatEl.id = 'ai-chatbot';
+  chatEl.innerHTML = `
+    <div class="chatbot-window hidden" id="chatbot-window">
+      <div class="chatbot-header">
+        <div class="ch-info">
+          <div class="ch-avatar">🤖</div>
+          <div>
+            <div class="ch-name">AI Asistent</div>
+            <div class="ch-status">AI Starter Pack pomoćnik</div>
+          </div>
+        </div>
+        <button class="ch-close" onclick="toggleChatbot()">✕</button>
+      </div>
+      <div class="chatbot-messages" id="chatbot-msgs">
+        <div class="chat-msg bot">
+          <div class="chat-bubble">Zdravo! Ja sam AI asistent za AI Starter Pack kurs. Pitaj me bilo šta o lekcijama, modulima ili veštačkoj inteligenciji! 🤖</div>
+        </div>
+      </div>
+      <div class="chatbot-quick-btns">
+        <button class="chatbot-quick-btn" onclick="chatQuick('Šta je mašinsko učenje?')">Mašinsko učenje</button>
+        <button class="chatbot-quick-btn" onclick="chatQuick('Kako da počnem kurs?')">Kako početi?</button>
+        <button class="chatbot-quick-btn" onclick="chatQuick('Kako se dobija sertifikat?')">Sertifikat</button>
+      </div>
+      <div class="chatbot-input-row">
+        <textarea class="chatbot-input" id="chatbot-input" placeholder="Postavi pitanje..." rows="1" onkeydown="chatKeydown(event)"></textarea>
+        <button class="chatbot-send" id="chatbot-send-btn" onclick="sendChatMsg()">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+    <button class="chatbot-toggle" onclick="toggleChatbot()" title="AI Asistent">
+      🤖
+      <span class="ct-badge"></span>
+    </button>
+  `;
+  document.body.appendChild(chatEl);
+
+  let chatHistory = [];
+  let chatOpen = false;
+
+  window.toggleChatbot = function() {
+    chatOpen = !chatOpen;
+    const win = document.getElementById('chatbot-window');
+    if (chatOpen) {
+      win.classList.remove('hidden');
+      document.getElementById('chatbot-input').focus();
+    } else {
+      win.classList.add('hidden');
+    }
+  };
+
+  window.chatQuick = function(msg) {
+    document.getElementById('chatbot-input').value = msg;
+    sendChatMsg();
+  };
+
+  window.chatKeydown = function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendChatMsg();
+    }
+  };
+
+  window.sendChatMsg = async function() {
+    const input = document.getElementById('chatbot-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+    input.value = '';
+
+    const msgs = document.getElementById('chatbot-msgs');
+    const sendBtn = document.getElementById('chatbot-send-btn');
+
+    // Add user message
+    msgs.innerHTML += `<div class="chat-msg user"><div class="chat-bubble">${msg.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div></div>`;
+
+    // Add typing indicator
+    const typingId = 'typing-' + Date.now();
+    msgs.innerHTML += `<div class="chat-msg bot" id="${typingId}"><div class="chat-typing"><span></span><span></span><span></span></div></div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+    sendBtn.disabled = true;
+
+    chatHistory.push({ role: 'user', content: msg });
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: `Ti si AI asistent za "AI Starter Pack" - besplatni online kurs o veštačkoj inteligenciji na srpskom jeziku namenjen početnicima. Kurs ima 7 modula:
+1. Šta je veštačka inteligencija?
+2. Kako AI rešava probleme?
+3. Uvod u mašinsko učenje
+4. Neuronske mreže
+5. AI u učenju i poslu
+6. Odgovorno korišćenje AI
+7. AI i društvo
+
+Sertifikat se dobija po završetku svih modula i polaganju kvizova. Kurs je potpuno besplatan, nudi 2 ECTS boda i 100€ popust za ITS/ITHS. Odgovaraj kratko, prijateljski i na srpskom jeziku. Ako je pitanje van teme kursa, ljubazno preusmeri na sadržaj kursa.`,
+          messages: chatHistory
+        })
+      });
+
+      const data = await response.json();
+      const reply = data.content?.[0]?.text || 'Izvini, nije mi uspelo da odgovorim. Pokušaj ponovo!';
+
+      chatHistory.push({ role: 'assistant', content: reply });
+      if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+
+      document.getElementById(typingId)?.remove();
+      msgs.innerHTML += `<div class="chat-msg bot"><div class="chat-bubble">${reply.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div></div>`;
+    } catch (err) {
+      document.getElementById(typingId)?.remove();
+      msgs.innerHTML += `<div class="chat-msg bot"><div class="chat-bubble">Došlo je do greške. Proveri internet konekciju i pokušaj ponovo.</div></div>`;
+    }
+
+    msgs.scrollTop = msgs.scrollHeight;
+    sendBtn.disabled = false;
+    input.focus();
+  };
+})();

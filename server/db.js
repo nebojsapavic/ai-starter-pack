@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
   postalCode: String,
   isVerified: { type: Boolean, default: false },
   verificationToken: String,
+  isAdmin: { type: Boolean, default: false },
   lastActiveAt: { type: Date, default: Date.now },
   createdAt: { type: Date, default: Date.now }
 });

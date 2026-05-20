@@ -63,13 +63,16 @@ function updateNav() {
   document.querySelectorAll('.nav-auth-btn').forEach(b => b.style.display = user ? 'none' : 'inline-flex');
   const navUser = document.getElementById('nav-user');
   const dashLink = document.querySelector('.nav-auth-item');
+  const adminBtn = document.getElementById('nav-admin-btn');
   if (user) {
     navUser.style.display = 'flex';
     document.getElementById('nav-user-name').textContent = user.firstName;
     if (dashLink) dashLink.style.display = 'inline';
+    if (adminBtn) adminBtn.style.display = user.isAdmin ? 'inline-flex' : 'none';
   } else {
     navUser.style.display = 'none';
     if (dashLink) dashLink.style.display = 'none';
+    if (adminBtn) adminBtn.style.display = 'none';
   }
 }
 

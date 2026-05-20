@@ -55,9 +55,15 @@ router.post('/login', async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ error: 'Pogrešan email ili lozinka.' });
     if (!user.isVerified) return res.status(403).json({ error: "Molimo potvrdite email adresu pre prijave. Proveri inbox." });
+    // Auto-set admin for known admin emails
+    const ADMIN_EMAILS = ['nebojsa.pavic@its.edu.rs', 'milena.ilic@its.edu.rs'];
+    if (ADMIN_EMAILS.includes(user.email) && !user.isAdmin) {
+      await User.findByIdAndUpdate(user._id, { isAdmin: true });
+      user.isAdmin = true;
+    }
     await User.findByIdAndUpdate(user._id, { lastActiveAt: new Date() });
-    const token = jwt.sign({ id: user._id, email: user.email }, SECRET, { expiresIn: '30d' });
-    res.json({ token, user: { id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email } });
+    const token = jwt.sign({ id: user._id, email: user.email, isAdmin: user.isAdmin || false }, SECRET, { expiresIn: '30d' });
+    res.json({ token, user: { id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, isAdmin: user.isAdmin || false } });
   } catch (e) {
     res.status(500).json({ error: 'Greška na serveru.' });
   }
